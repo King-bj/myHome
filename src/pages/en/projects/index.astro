@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Sidebar from '../../../components/common/Sidebar.astro';
+import ProjectCard from '../../../components/projects/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+import { getLangFromUrl, useTranslations } from '../../../i18n';
+
+const lang = getLangFromUrl(Astro.url) || 'en';
+const t = useTranslations(lang as 'zh' | 'en');
+
+const allProjects = await getCollection('projects');
+const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout lang={lang} title={t('projects.title')}>
+  <div class="flex min-h-screen">
+    <Sidebar lang={lang} />
+
+    <main class="main-content flex-1 p-4 md:p-8">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-8" style="color: var(--color-text-primary);">
+          {t('projects.title')}
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {projects.map((project) => (
+            <ProjectCard
+              name={project.data.name}
+              nameEn={project.data.nameEn}
+              description={project.data.description}
+              descriptionEn={project.data.descriptionEn}
+              techStack={project.data.techStack}
+              github={project.data.github}
+              demo={project.data.demo}
+              thumbnail={project.data.thumbnail}
+              status={project.data.status}
+              lang={lang}
+            />
+          ))}
+        </div>
+
+        {projects.length === 0 && (
+          <p class="text-center py-12" style="color: var(--color-text-muted);">
+            {lang === 'en' ? 'No projects yet' : '暂无项目'}
+          </p>
+        )}
+      </div>
+    </main>
+  </div>
+</BaseLayout>

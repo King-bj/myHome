@@ -1,0 +1,179 @@
+---
+interface TocItem {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  items: TocItem[];
+  variant?: 'mobile' | 'desktop';
+}
+
+const { items, variant = 'mobile' } = Astro.props;
+const isMobile = variant === 'mobile';
+---
+
+{items.length > 0 && (
+  <nav class="toc-wrapper" aria-label="Table of Contents">
+    {isMobile ? (
+      <!-- Mobile TOC (collapsible inline) -->
+      <details class="toc-mobile">
+        <summary class="toc-summary">
+          <span class="font-semibold" style="color: var(--color-text-primary);">目录</span>
+          <svg class="toc-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </summary>
+        <ul class="toc-list">
+          {items.map((item) => (
+            <li class={`toc-item toc-depth-${item.depth}`}>
+              <a href={`#${item.slug}`} class="toc-link">
+                {item.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    ) : (
+      <!-- Desktop TOC -->
+      <div class="toc-sticky">
+        <h4 class="toc-title">目录</h4>
+        <ul class="toc-list">
+          {items.map((item) => (
+            <li class={`toc-item toc-depth-${item.depth}`}>
+              <a href={`#${item.slug}`} class="toc-link">
+                {item.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </nav>
+)}
+
+<style>
+  /* Mobile TOC */
+  .toc-mobile {
+    @apply mb-6 rounded-lg p-4;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+  }
+
+  .toc-summary {
+    @apply flex items-center justify-between cursor-pointer list-none;
+    color: var(--color-text-primary);
+  }
+
+  .toc-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .toc-chevron {
+    @apply transition-transform duration-200;
+  }
+
+  .toc-mobile[open] .toc-chevron {
+    @apply rotate-180;
+  }
+
+  /* Desktop TOC */
+  .toc-sticky {
+    @apply p-4 rounded-lg;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+  }
+
+  .toc-title {
+    @apply text-sm font-semibold mb-3;
+    color: var(--color-text-primary);
+  }
+
+  /* Shared list styles */
+  .toc-list {
+    @apply space-y-1;
+  }
+
+  .toc-mobile .toc-list {
+    @apply mt-3;
+  }
+
+  .toc-item {
+    @apply list-none;
+  }
+
+  .toc-depth-2 {
+    @apply ml-0;
+  }
+
+  .toc-depth-3 {
+    @apply ml-3;
+  }
+
+  .toc-depth-4 {
+    @apply ml-6;
+  }
+
+  .toc-link {
+    @apply block py-1 px-2 rounded text-sm transition-colors;
+    color: var(--color-text-secondary);
+  }
+
+  .toc-link:hover {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-accent);
+  }
+
+  .toc-link.active {
+    color: var(--color-accent);
+    background-color: var(--color-bg-tertiary);
+  }
+</style>
+
+<script>
+  // Track active section on scroll
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const headings = document.querySelectorAll('article h2, article h3, article h4');
+
+  if (tocLinks.length > 0 && headings.length > 0) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = entry.target.getAttribute('id');
+          if (id && entry.isIntersecting) {
+            tocLinks.forEach((link) => {
+              link.classList.remove('active');
+              if (link.getAttribute('href') === `#${id}`) {
+                link.classList.add('active');
+              }
+            });
+          }
+        });
+      },
+      {
+        rootMargin: '-80px 0px -80% 0px',
+      }
+    );
+
+    headings.forEach((heading) => {
+      observer.observe(heading);
+    });
+  }
+
+  // Smooth scroll to heading on click
+  tocLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href')?.slice(1);
+      if (targetId) {
+        const target = document.getElementById(targetId);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // Update URL without jumping
+          history.pushState(null, '', `#${targetId}`);
+        }
+      }
+    });
+  });
+</script>

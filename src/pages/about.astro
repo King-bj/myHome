@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from '../components/common/Sidebar.astro';
+import { getLangFromUrl, useTranslations } from '../i18n';
+
+const lang = getLangFromUrl(Astro.url) || 'zh';
+const t = useTranslations(lang as 'zh' | 'en');
+---
+
+<BaseLayout lang={lang} title={t('about.title')}>
+  <div class="flex min-h-screen">
+    <Sidebar lang={lang} />
+
+    <main class="main-content flex-1 p-4 md:p-8">
+      <div class="max-w-3xl mx-auto">
+        <h1 class="text-2xl font-bold mb-8" style="color: var(--color-text-primary);">
+          {t('about.title')}
+        </h1>
+
+        <!-- 我是谁 -->
+        <section class="mb-12">
+          <div class="card p-6">
+            <div class="prose prose-slate dark:prose-invert max-w-none">
+              <p class="text-lg mb-4" style="color: var(--color-text-secondary);">
+                8年后端开发者，正在探索 AI 时代的技术可能性。
+              </p>
+              <p style="color: var(--color-text-secondary);">
+                我擅长在复杂系统中定位和解决性能瓶颈——从 Flink 数据处理到 Elasticsearch 检索优化，从 JVM 调优到分布式架构设计。我享受把一个慢系统变快的过程。
+              </p>
+              <p class="mt-4" style="color: var(--color-text-secondary);">
+                现在，我在学习如何用 AI 放大个人能力：从 Prompt Engineering 到 Agent 开发，从 RAG 系统到自动化工作流。我相信未来最好的开发者，是能和 AI 协作的人。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 我能帮你解决什么问题 -->
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold mb-6" style="color: var(--color-text-primary);">
+            我能帮你解决什么问题
+          </h2>
+
+          <div class="space-y-4">
+            <div class="card p-6">
+              <h3 class="font-medium mb-2" style="color: var(--color-text-primary);">
+                🚀 性能问题排查与优化
+              </h3>
+              <p class="text-sm" style="color: var(--color-text-secondary);">
+                数据处理慢、内存占用高、查询响应慢？我可以帮你定位瓶颈并给出优化方案。
+              </p>
+            </div>
+
+            <div class="card p-6">
+              <h3 class="font-medium mb-2" style="color: var(--color-text-primary);">
+                🏗️ 后端架构设计
+              </h3>
+              <p class="text-sm" style="color: var(--color-text-secondary);">
+                需要设计可扩展的数据处理系统？我可以分享从单机到分布式集群的实战经验。
+              </p>
+            </div>
+
+            <div class="card p-6">
+              <h3 class="font-medium mb-2" style="color: var(--color-text-primary);">
+                🤖 AI 应用开发
+              </h3>
+              <p class="text-sm" style="color: var(--color-text-secondary);">
+                想把 AI 能力接入现有系统？我可以帮你设计 RAG、Agent 或自动化工作流。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 正在探索 -->
+        <section class="mb-12">
+          <h2 class="text-xl font-semibold mb-6" style="color: var(--color-text-primary);">
+            正在探索
+          </h2>
+
+          <div class="card p-6">
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">AI Agent 开发</span>
+              <span class="tag">RAG 系统构建</span>
+              <span class="tag">LLM 应用落地</span>
+              <span class="tag">自动化工作流</span>
+              <span class="tag">独立开发者生态</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 技术栈 -->
+        <section>
+          <h2 class="text-xl font-semibold mb-6" style="color: var(--color-text-primary);">
+            技术栈
+          </h2>
+
+          <div class="card p-6">
+            <div class="grid gap-4 md:grid-cols-2">
+              <div>
+                <h3 class="font-medium mb-3 text-sm" style="color: var(--color-text-muted);">
+                  后端 & 大数据
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                  <span class="tag">Java</span>
+                  <span class="tag">Python</span>
+                  <span class="tag">Kafka</span>
+                  <span class="tag">Flink</span>
+                  <span class="tag">Elasticsearch</span>
+                  <span class="tag">Redis</span>
+                </div>
+              </div>
+              <div>
+                <h3 class="font-medium mb-3 text-sm" style="color: var(--color-text-muted);">
+                  AI & 工具
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                  <span class="tag">LangChain</span>
+                  <span class="tag">Claude API</span>
+                  <span class="tag">OpenAI API</span>
+                  <span class="tag">Docker</span>
+                  <span class="tag">K8s</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</BaseLayout>

@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/common/Sidebar.astro';
+import { getCollection } from 'astro:content';
+import { getLangFromUrl, useTranslations } from '../../i18n';
+
+const lang = getLangFromUrl(Astro.url) || 'zh';
+const t = useTranslations(lang as 'zh' | 'en');
+
+const videosCollection = await getCollection('videos');
+const videos = videosCollection.length > 0 ? videosCollection[0].data : [];
+
+const sortedVideos = [...videos].sort((a, b) => b.pubDate.valueOf() - a.pubDate.valueOf());
+
+const platformUrls = {
+  bilibili: (id: string) => `https://www.bilibili.com/video/${id}`,
+  youtube: (id: string) => `https://www.youtube.com/watch?v=${id}`
+};
+
+const platformLabels: Record<string, Record<string, string>> = {
+  zh: { bilibili: 'B站', youtube: 'YouTube' },
+  en: { bilibili: 'Bilibili', youtube: 'YouTube' }
+};
+---
+
+<BaseLayout lang={lang} title={t('videos.title')}>
+  <div class="flex min-h-screen">
+    <Sidebar lang={lang} />
+
+    <main class="main-content flex-1 p-4 md:p-8">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-8" style="color: var(--color-text-primary);">
+          {t('videos.title')}
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {sortedVideos.map((video) => {
+            const videoTitle = lang === 'en' && video.titleEn ? video.titleEn : video.title;
+            const videoDesc = lang === 'en' && video.descriptionEn ? video.descriptionEn : video.description;
+            const videoUrl = platformUrls[video.platform](video.videoId);
+            const formattedDate = video.pubDate.toLocaleDateString(lang === 'en' ? 'en-US' : 'zh-CN', {
+              year: 'numeric',
+              month: 'short'
+            });
+
+            return (
+              <a
+                href={videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="card group block"
+              >
+                <div class="aspect-video overflow-hidden relative" style="background-color: var(--color-bg-tertiary);">
+                  {video.thumbnail ? (
+                    <img
+                      src={video.thumbnail}
+                      alt={videoTitle}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-muted);">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                      </svg>
+                    </div>
+                  )}
+
+                  <span class="absolute top-2 right-2 tag">
+                    {platformLabels[lang][video.platform]}
+                  </span>
+
+                  {video.duration && (
+                    <span class="absolute bottom-2 right-2 text-xs px-1.5 py-0.5 rounded" style="background-color: rgba(0,0,0,0.7); color: white;">
+                      {video.duration}
+                    </span>
+                  )}
+                </div>
+
+                <div class="p-4">
+                  <h3 class="font-semibold mb-2 group-hover:opacity-80 transition-opacity" style="color: var(--color-text-primary);">
+                    {videoTitle}
+                  </h3>
+
+                  {videoDesc && (
+                    <p class="text-sm mb-2 line-clamp-2" style="color: var(--color-text-secondary);">
+                      {videoDesc}
+                    </p>
+                  )}
+
+                  <time class="text-xs" style="color: var(--color-text-muted);">
+                    {formattedDate}
+                  </time>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+
+        {sortedVideos.length === 0 && (
+          <p class="text-center py-12" style="color: var(--color-text-muted);">
+            {lang === 'en' ? 'No videos yet' : '暂无视频'}
+          </p>
+        )}
+      </div>
+    </main>
+  </div>
+</BaseLayout>

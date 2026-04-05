@@ -1,0 +1,16 @@
+name: 十年书                                                                                               
+nameEn: Decadebook                                                                                         
+description:  中国五年规划数据平台，整合十一五至十五五规划原文、统计年鉴、公报数据，支持时间轴浏览、关键词检索和数据溯源 
+descriptionEn: China Five-Year Plan data platform integrating planning documents, statistical yearbooks, and  data from 11th to 15th Five-Year Plan with timeline navigation and data tracing                    
+techStack:      
+  - TypeScript                                                                                             
+  - Vue 3                                                                                                  
+  - NestJS                                                                                                 
+  - SQLite                                                                                                 
+  - ECharts                                                                                                
+  - Element Plus                                                                                           
+github: https://github.com/King-bj/decadebook.git        
+thumbnail: https://images.jinla.fun/images/20260405-52aa17e1-%E5%8D%81%E5%B9%B4%E4%B9%A6.webp              
+featured: true                                                                                             
+status: completed                                                                                       
+order: 1

@@ -1,0 +1,193 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/common/Sidebar.astro';
+import ArticleContent from '../../components/articles/ArticleContent.astro';
+import TableOfContents from '../../components/articles/TableOfContents.astro';
+import RelatedArticles from '../../components/articles/RelatedArticles.astro';
+import { getCollection } from 'astro:content';
+import { getLangFromUrl, useTranslations } from '../../i18n';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  // Only return zh articles
+  return articles
+    .filter(article => article.slug.startsWith('zh/'))
+    .map((article) => ({
+      params: { slug: article.slug.replace('zh/', '') },
+      props: article,
+    }));
+}
+
+const article = Astro.props;
+const renderedArticle = await article.render();
+
+const lang = getLangFromUrl(Astro.url) || 'zh';
+const t = useTranslations(lang as 'zh' | 'en');
+
+const title = article.data.title;
+const description = article.data.description;
+
+const formattedDate = article.data.pubDate.toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+// Calculate reading time (Chinese: ~400 chars/min)
+const articleText = article.body || '';
+const wordCount = articleText.length;
+const readingTime = Math.ceil(wordCount / 400);
+
+// Extract headings from markdown source for TOC
+interface TocItem {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+const tocItems: TocItem[] = [];
+const headingRegex = /^(#{2,3})\s+(.+)$/gm;
+const slugify = (text: string) => {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\u4e00-\u9fa5]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
+let headingMatch;
+while ((headingMatch = headingRegex.exec(articleText)) !== null) {
+  const depth = headingMatch[1].length;
+  const text = headingMatch[2].trim();
+  tocItems.push({
+    depth,
+    slug: slugify(text),
+    text,
+  });
+}
+
+// Get English version link if available
+const englishVersionSlug = article.data.slugEn;
+const englishVersionUrl = englishVersionSlug ? `/en/articles/${englishVersionSlug}` : null;
+---
+
+<BaseLayout lang={lang} title={title} description={description}>
+  <div class="flex min-h-screen">
+    <Sidebar lang={lang} />
+
+    <main class="main-content flex-1 p-4 md:p-8">
+      <div class="article-layout">
+        <!-- Desktop TOC (fixed sidebar) -->
+        {tocItems.length > 0 && (
+          <aside class="toc-sidebar hidden md:block">
+            <TableOfContents items={tocItems} variant="desktop" />
+          </aside>
+        )}
+
+        <article class="article-main max-w-3xl mx-auto">
+        <!-- Back link -->
+        <nav class="mb-6">
+          <a href="/articles" class="inline-flex items-center gap-1 text-sm link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+            {t('articles.title')}
+          </a>
+        </nav>
+
+        <header class="mb-8">
+          <div class="flex items-center gap-4 mb-4">
+            <time class="text-sm" style="color: var(--color-text-muted);">
+              {formattedDate}
+            </time>
+            {readingTime > 0 && (
+              <span class="text-sm" style="color: var(--color-text-muted);">
+                · {readingTime} 分钟阅读
+              </span>
+            )}
+          </div>
+
+          <h1 class="text-2xl md:text-3xl font-bold mb-4" style="color: var(--color-text-primary);">
+            {title}
+          </h1>
+
+          <p class="text-lg" style="color: var(--color-text-secondary);">
+            {description}
+          </p>
+
+          <div class="flex flex-wrap gap-2 mt-4">
+            {article.data.tags.map((tag: string) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+
+          <!-- Language Switch Link -->
+          {englishVersionUrl && (
+            <div class="mt-4 pt-4 border-t" style="border-color: var(--color-border);">
+              <a href={englishVersionUrl} class="inline-flex items-center gap-2 text-sm link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                查看英文版 (View in English)
+              </a>
+            </div>
+          )}
+
+          {article.data.externalLinks && article.data.externalLinks.length > 0 && (
+            <div class="mt-4 pt-4 border-t" style="border-color: var(--color-border);">
+              <span class="text-sm" style="color: var(--color-text-muted);">
+                {t('articles.alsoPublishedOn')}:
+              </span>
+              <div class="flex gap-3 mt-2">
+                {article.data.externalLinks.map((link: {platform: string; url: string}) => (
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="link text-sm"
+                  >
+                    {link.platform}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </header>
+
+        <!-- Mobile TOC (inline) -->
+        <div class="md:hidden">
+          {tocItems.length > 0 && (
+            <TableOfContents items={tocItems} variant="mobile" />
+          )}
+        </div>
+
+        <ArticleContent content={renderedArticle} lang={lang as 'zh' | 'en'} />
+
+        <!-- Related Articles -->
+        <RelatedArticles
+          currentSlug={article.slug}
+          tags={article.data.tags}
+          lang={lang as 'zh' | 'en'}
+        />
+        </article>
+      </div>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .article-layout {
+    position: relative;
+  }
+
+  .toc-sidebar {
+    position: fixed;
+    right: 1.5rem;
+    top: 6rem;
+    width: 200px;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    z-index: 10;
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  currentSlug: string;
+  tags: string[];
+  lang: 'zh' | 'en';
+  limit?: number;
+}
+
+const { currentSlug, tags, lang, limit = 3 } = Astro.props;
+
+const allArticles = await getCollection('articles');
+
+// Determine language prefix for filtering and URLs
+const langPrefix = lang === 'en' ? 'en/' : 'zh/';
+
+// Filter and sort related articles (only same language)
+const relatedArticles = allArticles
+  .filter((article) => {
+    // Exclude current article
+    if (article.slug === currentSlug) return false;
+    // Exclude drafts
+    if (article.data.draft) return false;
+    // Only same language articles
+    if (!article.slug.startsWith(langPrefix)) return false;
+    // Check for matching tags
+    const matchingTags = article.data.tags.filter((tag: string) => tags.includes(tag));
+    return matchingTags.length > 0;
+  })
+  .map((article) => {
+    const matchingTags = article.data.tags.filter((tag: string) => tags.includes(tag));
+    return {
+      article,
+      matchCount: matchingTags.length,
+    };
+  })
+  .sort((a, b) => {
+    // Sort by number of matching tags, then by date
+    if (a.matchCount !== b.matchCount) {
+      return b.matchCount - a.matchCount;
+    }
+    return b.article.data.pubDate.valueOf() - a.article.data.pubDate.valueOf();
+  })
+  .slice(0, limit)
+  .map((item) => item.article);
+---
+
+{relatedArticles.length > 0 && (
+  <section class="related-articles mt-12 pt-8 border-t" style="border-color: var(--color-border);">
+    <h2 class="text-lg font-semibold mb-4" style="color: var(--color-text-primary);">
+      {lang === 'en' ? 'Related Articles' : '相关文章'}
+    </h2>
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {relatedArticles.map((article) => {
+        const title = article.data.title;
+        const description = article.data.description;
+        const formattedDate = article.data.pubDate.toLocaleDateString(lang === 'en' ? 'en-US' : 'zh-CN', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+        const matchingTags = article.data.tags.filter((tag: string) => tags.includes(tag));
+        // Build URL based on language
+        const articleSlug = article.slug.replace(langPrefix, '');
+        const articleUrl = lang === 'en' ? `/en/articles/${articleSlug}` : `/articles/${articleSlug}`;
+
+        return (
+          <a
+            href={articleUrl}
+            class="related-article-card group"
+          >
+            <article class="h-full">
+              <div class="flex flex-col h-full">
+                <h3 class="font-medium mb-2 group-hover:text-[var(--color-accent)] transition-colors" style="color: var(--color-text-primary);">
+                  {title}
+                </h3>
+                <p class="text-sm mb-3 flex-1 line-clamp-2" style="color: var(--color-text-secondary);">
+                  {description}
+                </p>
+                <div class="flex items-center justify-between mt-auto">
+                  <time class="text-xs" style="color: var(--color-text-muted);">
+                    {formattedDate}
+                  </time>
+                  <div class="flex gap-1">
+                    {matchingTags.slice(0, 2).map((tag: string) => (
+                      <span class="text-xs px-1.5 py-0.5 rounded" style="background-color: var(--color-bg-tertiary); color: var(--color-accent);">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </article>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+)}
+
+<style>
+  .related-article-card {
+    @apply block p-4 rounded-lg transition-all duration-200;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+  }
+
+  .related-article-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+  }
+
+  .dark .related-article-card:hover {
+    box-shadow: 0 2px 8px rgba(96, 165, 250, 0.1);
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

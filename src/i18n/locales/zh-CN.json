@@ -1,0 +1,52 @@
+{
+  "nav": {
+    "home": "首页",
+    "projects": "项目",
+    "videos": "视频",
+    "articles": "文章",
+    "about": "关于"
+  },
+  "home": {
+    "greeting": "你好，我是",
+    "title": "独立开发者 & AI探索者",
+    "subtitle": "用代码构建产品，用AI放大能力",
+    "viewProjects": "查看项目",
+    "viewArticles": "阅读文章",
+    "featuredProjects": "精选作品",
+    "latestArticles": "最新文章",
+    "viewAll": "查看全部"
+  },
+  "projects": {
+    "title": "项目作品",
+    "viewOnGithub": "GitHub",
+    "viewDemo": "在线演示",
+    "status": {
+      "completed": "已完成",
+      "in-progress": "进行中",
+      "archived": "已归档"
+    }
+  },
+  "articles": {
+    "title": "技术文章",
+    "readMore": "阅读全文",
+    "alsoPublishedOn": "本文也发布于",
+    "minRead": "分钟阅读",
+    "noArticles": "暂无文章"
+  },
+  "videos": {
+    "title": "视频内容",
+    "watchOn": "在{{platform}}观看"
+  },
+  "about": {
+    "title": "关于我",
+    "skills": "技能栈"
+  },
+  "contact": {
+    "title": "联系我",
+    "email": "邮箱",
+    "social": "社交媒体"
+  },
+  "footer": {
+    "copyright": "© {{year}} 植木自生. 保留所有权利."
+  }
+}

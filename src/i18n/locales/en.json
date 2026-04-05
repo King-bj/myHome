@@ -1,0 +1,52 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "videos": "Videos",
+    "articles": "Articles",
+    "about": "About"
+  },
+  "home": {
+    "greeting": "Hi, I'm",
+    "title": "Indie Developer & AI Explorer",
+    "subtitle": "Building products with code, amplifying capabilities with AI",
+    "viewProjects": "View Projects",
+    "viewArticles": "Read Articles",
+    "featuredProjects": "Featured Projects",
+    "latestArticles": "Latest Articles",
+    "viewAll": "View All"
+  },
+  "projects": {
+    "title": "Projects",
+    "viewOnGithub": "GitHub",
+    "viewDemo": "Live Demo",
+    "status": {
+      "completed": "Completed",
+      "in-progress": "In Progress",
+      "archived": "Archived"
+    }
+  },
+  "articles": {
+    "title": "Articles",
+    "readMore": "Read More",
+    "alsoPublishedOn": "Also published on",
+    "minRead": "min read",
+    "noArticles": "No articles yet"
+  },
+  "videos": {
+    "title": "Videos",
+    "watchOn": "Watch on {{platform}}"
+  },
+  "about": {
+    "title": "About Me",
+    "skills": "Skills"
+  },
+  "contact": {
+    "title": "Contact",
+    "email": "Email",
+    "social": "Social Media"
+  },
+  "footer": {
+    "copyright": "© {{year}} Zhimu Zisheng. All rights reserved."
+  }
+}

@@ -1,0 +1,17 @@
+- title: 从零构建AI应用
+  titleEn: Building AI Apps from Scratch
+  description: 手把手教你用LangChain构建第一个AI应用
+  descriptionEn: Step-by-step guide to building your first AI app with LangChain
+  platform: bilibili
+  videoId: BV1xx411c7mD
+  pubDate: 2024-03-01
+  duration: 15:30
+
+- title: Claude API实战技巧
+  titleEn: Claude API Practical Tips
+  description: 分享使用Claude API的最佳实践和常见陷阱
+  descriptionEn: Best practices and common pitfalls when using Claude API
+  platform: bilibili
+  videoId: BV1yy411c7mE
+  pubDate: 2024-02-15
+  duration: 12:45

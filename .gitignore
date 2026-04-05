@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Generated images (local cache)
+images/
+prompts/
+
+# Astro build cache
+.astro/
+
+# Playwright CLI
+.playwright-cli/
+
+# Scripts env files
+scripts/.env

@@ -1,0 +1,50 @@
+import { useState, useEffect } from 'react';
+import { Globe } from 'lucide-react';
+
+export default function LanguageSwitch() {
+  const [currentLang, setCurrentLang] = useState<'zh' | 'en'>('zh');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const path = window.location.pathname;
+    const isEn = path.startsWith('/en');
+    setCurrentLang(isEn ? 'en' : 'zh');
+  }, []);
+
+  const toggle = () => {
+    const newLang = currentLang === 'zh' ? 'en' : 'zh';
+    const path = window.location.pathname;
+
+    let newPath: string;
+    if (newLang === 'en') {
+      // Switching to English
+      newPath = '/en' + (path === '/' ? '' : path);
+    } else {
+      // Switching to Chinese
+      newPath = path.replace(/^\/en/, '') || '/';
+    }
+
+    window.location.href = newPath;
+  };
+
+  if (!mounted) {
+    return (
+      <button className="p-2 rounded-lg text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+        中
+      </button>
+    );
+  }
+
+  return (
+    <button
+      onClick={toggle}
+      className="flex items-center gap-1 p-2 rounded-lg hover:opacity-80 transition-opacity text-xs font-medium"
+      style={{ color: 'var(--color-text-secondary)' }}
+      aria-label="Switch language"
+    >
+      <Globe size={16} />
+      <span>{currentLang === 'zh' ? 'EN' : '中'}</span>
+    </button>
+  );
+}

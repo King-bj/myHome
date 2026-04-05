@@ -1,0 +1,121 @@
+---
+import ThemeToggle from './ThemeToggle';
+import LanguageSwitch from './LanguageSwitch';
+import SearchButton from './SearchButton.astro';
+import { getLangFromUrl, useTranslations, defaultLang } from '../../i18n';
+import { siteConfig } from '../../data/site';
+
+interface Props {
+  lang?: string;
+}
+
+const { lang } = Astro.props;
+const currentLang = lang || getLangFromUrl(Astro.url);
+const t = useTranslations(currentLang as 'zh' | 'en');
+
+const prefix = currentLang === defaultLang ? '' : `/${currentLang}`;
+
+const navItems = [
+  { href: `${prefix}/`, label: t('nav.home') },
+  { href: `${prefix}/projects`, label: t('nav.projects') },
+  { href: `${prefix}/articles`, label: t('nav.articles') },
+  { href: `${prefix}/videos`, label: t('nav.videos') },
+  { href: `${prefix}/about`, label: t('nav.about') },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<aside class="sidebar flex flex-col">
+  <div class="p-6 flex-1">
+    <!-- Avatar & Name -->
+    <div class="mb-8">
+      <div class="w-24 h-24 rounded-full overflow-hidden mb-4 mx-auto md:mx-0" style="background-color: var(--color-bg-tertiary);">
+        <img
+          src={siteConfig.avatar}
+          alt={currentLang === 'en' ? siteConfig.nameEn : siteConfig.name}
+          class="w-full h-full object-cover"
+          onerror="this.style.display='none'"
+        />
+      </div>
+      <h1 class="text-xl font-bold text-center md:text-left" style="color: var(--color-text-primary);">
+        {currentLang === 'en' ? siteConfig.nameEn : siteConfig.name}
+      </h1>
+      <p class="text-sm mt-1 text-center md:text-left" style="color: var(--color-text-secondary);">
+        {currentLang === 'en' ? 'Indie Developer & AI Explorer' : '独立开发者 & AI探索者'}
+      </p>
+    </div>
+
+    <!-- Search -->
+    <div class="mb-6">
+      <SearchButton />
+    </div>
+
+    <!-- Navigation -->
+    <nav class="space-y-1 mb-8">
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class:list={['nav-link block', {
+            'active': currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
+          }]}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Social Links -->
+    <div class="flex items-center gap-2 justify-center md:justify-start mb-6">
+      <a
+        href={siteConfig.social.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="p-2 rounded-lg transition-colors hover:opacity-80"
+        style="color: var(--color-text-secondary);"
+        aria-label="GitHub"
+        title="GitHub"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
+          <path d="M9 18c-4.51 2-5-2-7-2"></path>
+        </svg>
+      </a>
+      <a
+        href={siteConfig.social.bilibili}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="p-2 rounded-lg transition-colors hover:opacity-80"
+        style="color: var(--color-text-secondary);"
+        aria-label="Bilibili"
+        title="Bilibili"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/>
+          <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9"/>
+          <path d="M12 3v6"/>
+          <path d="M8 14h.01"/>
+          <path d="M16 14h.01"/>
+        </svg>
+      </a>
+      <a
+        href={`mailto:${siteConfig.email}`}
+        class="p-2 rounded-lg transition-colors hover:opacity-80"
+        style="color: var(--color-text-secondary);"
+        aria-label="Email"
+        title="Email"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="20" height="16" x="2" y="4" rx="2"/>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Theme & Language Controls -->
+  <div class="p-4 border-t flex items-center justify-center gap-2" style="border-color: var(--color-border);">
+    <LanguageSwitch client:load />
+    <ThemeToggle client:load />
+  </div>
+</aside>

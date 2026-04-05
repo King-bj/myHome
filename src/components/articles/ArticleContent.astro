@@ -1,0 +1,160 @@
+---
+interface Props {
+  content: {
+    Content: any;
+  };
+  lang?: 'zh' | 'en';
+}
+
+const { content, lang = 'zh' } = Astro.props;
+const { Content } = content;
+---
+
+<div class="prose prose-slate dark:prose-invert max-w-none
+  prose-headings:font-semibold prose-headings:scroll-mt-20
+  prose-headings:color-[var(--color-text-primary)]
+  prose-p:color-[var(--color-text-secondary)]
+  prose-p:leading-relaxed
+  prose-a:color-[var(--color-accent)] prose-a:underline prose-a:decoration-[var(--color-accent)]/30 prose-a:underline-offset-2
+  prose-a:hover:decoration-[var(--color-accent)]
+  prose-strong:color-[var(--color-text-primary)] prose-strong:font-semibold
+  prose-blockquote:border-l-[var(--color-accent)] prose-blockquote:bg-[var(--color-bg-tertiary)] prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:not-italic
+  prose-h2:mt-10 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-[var(--color-border)]
+  prose-h3:mt-8 prose-h3:mb-3
+  prose-h4:mt-6 prose-h4:mb-2
+  prose-ul:my-4 prose-ol:my-4
+  prose-li:my-1
+  prose-img:rounded-lg prose-img:shadow-sm
+  prose-hr:border-[var(--color-border)] prose-hr:my-8
+  prose-table:overflow-hidden prose-table:rounded-lg prose-table:border prose-table:border-[var(--color-border)]
+  prose-th:bg-[var(--color-bg-tertiary)] prose-th:p-3
+  prose-td:p-3 prose-td:border-t prose-td:border-[var(--color-border)]
+">
+  <Content />
+</div>
+
+<script is:inline>
+  // Handle image loading errors in article content
+  document.querySelectorAll('.prose img').forEach((img) => {
+    img.onerror = function() {
+      img.style.display = 'none';
+      const placeholder = document.createElement('div');
+      placeholder.className = 'image-placeholder';
+      placeholder.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+      `;
+      img.parentNode?.replaceChild(placeholder, img);
+    };
+  });
+
+  // Add language badge to code blocks
+  document.querySelectorAll('pre[data-language]').forEach((pre) => {
+    const codeLang = pre.getAttribute('data-language');
+    if (codeLang && codeLang !== 'plaintext') {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block-wrapper';
+      const badge = document.createElement('span');
+      badge.className = 'code-language-badge';
+      badge.textContent = codeLang;
+      pre.parentNode?.insertBefore(wrapper, pre);
+      wrapper.appendChild(badge);
+      wrapper.appendChild(pre);
+    }
+  });
+</script>
+
+<style>
+  .image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    background-color: var(--color-bg-tertiary);
+    border-radius: 0.5rem;
+    color: var(--color-text-muted);
+    margin: 1rem 0;
+  }
+
+  /* Code block enhancements */
+  .prose pre {
+    @apply rounded-lg p-4 my-4;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .prose pre {
+    background-color: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .prose code {
+    @apply rounded px-1.5 py-0.5 text-sm;
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    font-weight: 400;
+  }
+
+  .prose pre code {
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+  }
+
+  /* Code block wrapper with language badge */
+  .code-block-wrapper {
+    @apply relative my-4;
+  }
+
+  .code-language-badge {
+    @apply absolute top-2 right-2 text-xs px-2 py-0.5 rounded font-mono;
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-muted);
+    z-index: 10;
+  }
+
+  /* Inline code vs code block distinction */
+  .prose :not(pre) > code {
+    @apply before:content-none after:content-none;
+    border: 1px solid var(--color-border);
+  }
+
+  .dark .prose :not(pre) > code {
+    border-color: #475569;
+    background-color: #334155;
+  }
+
+  /* Syntax highlighting adjustments for dark mode */
+  .dark .prose pre {
+    color: #e2e8f0;
+  }
+
+  /* Improve code block scrolling */
+  .prose pre {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .prose pre::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .prose pre::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .prose pre::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+  }
+
+  .dark .prose pre::-webkit-scrollbar-thumb {
+    background: #475569;
+  }
+</style>
