@@ -125,27 +125,6 @@ const currentPath = Astro.url.pathname;
       </button>
     </div>
 
-    <!-- WeChat QR Modal -->
-    <div id="wechat-modal" class="fixed inset-0 z-50 hidden items-center justify-center" style="background-color: rgba(0,0,0,0.5);">
-      <div class="card p-6 max-w-xs mx-4 relative">
-        <button id="wechat-close" class="absolute top-2 right-2 p-1 rounded" style="color: var(--color-text-muted);">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-          </svg>
-        </button>
-        <img
-          src="https://images.jinla.fun/images/20260406-c184d5d9-闲时谈富.webp"
-          alt={currentLang === 'en' ? 'WeChat Official Account: 闲时谈富' : '微信公众号：闲时谈富'}
-          class="w-48 h-48 rounded-lg mx-auto mb-4"
-        />
-        <p class="text-center font-medium" style="color: var(--color-text-primary);">
-          {currentLang === 'en' ? 'WeChat Official Account' : '微信公众号'}
-        </p>
-        <p class="text-center text-sm" style="color: var(--color-text-secondary);">
-          闲时谈富
-        </p>
-      </div>
-    </div>
   </div>
 
   <!-- Theme & Language Controls -->
@@ -156,21 +135,54 @@ const currentPath = Astro.url.pathname;
 
   <script>
     const wechatBtn = document.getElementById('wechat-btn');
-    const wechatModal = document.getElementById('wechat-modal');
-    const wechatClose = document.getElementById('wechat-close');
+
+    // Create modal dynamically and append to body
+    const createWechatModal = () => {
+      const modal = document.createElement('div');
+      modal.id = 'wechat-modal';
+      modal.className = 'fixed inset-0 z-[9999] hidden items-center justify-center';
+      modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+      modal.innerHTML = `
+        <div class="card p-6 max-w-xs mx-4 relative" style="background-color: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 0.75rem;">
+          <button id="wechat-close" class="absolute top-2 right-2 p-1 rounded" style="color: var(--color-text-muted);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+          <img
+            src="https://images.jinla.fun/images/20260406-c184d5d9-闲时谈富.webp"
+            alt="微信公众号：闲时谈富"
+            class="w-48 h-48 rounded-lg mx-auto mb-4"
+          />
+          <p class="text-center font-medium" style="color: var(--color-text-primary);">
+            微信公众号
+          </p>
+          <p class="text-center text-sm" style="color: var(--color-text-secondary);">
+            闲时谈富
+          </p>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      return modal;
+    };
+
+    let wechatModal = document.getElementById('wechat-modal') || createWechatModal();
 
     wechatBtn?.addEventListener('click', () => {
+      if (!document.getElementById('wechat-modal')) {
+        wechatModal = createWechatModal();
+      }
       wechatModal?.classList.remove('hidden');
       wechatModal?.classList.add('flex');
     });
 
-    wechatClose?.addEventListener('click', () => {
-      wechatModal?.classList.add('hidden');
-      wechatModal?.classList.remove('flex');
-    });
-
-    wechatModal?.addEventListener('click', (e) => {
-      if (e.target === wechatModal) {
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.id === 'wechat-close' || target.closest('#wechat-close')) {
+        wechatModal?.classList.add('hidden');
+        wechatModal?.classList.remove('flex');
+      }
+      if (target.id === 'wechat-modal') {
         wechatModal.classList.add('hidden');
         wechatModal.classList.remove('flex');
       }
