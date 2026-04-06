@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # 部署配置 - 根据实际情况修改
-SERVER_USER="root"                    # 服务器用户名
-SERVER_HOST="your-server-ip"          # 服务器 IP 或域名
+SERVER_USER="ubuntu"                    # 服务器用户名
+SERVER_HOST="152.136.63.155"          # 服务器 IP 或域名
 REMOTE_PATH="/var/www/myHome/dist"    # 服务器上的部署路径
 
 # 颜色输出

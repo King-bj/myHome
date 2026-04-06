@@ -38,32 +38,20 @@ const articleText = article.body || '';
 const wordCount = articleText.length;
 const readingTime = Math.ceil(wordCount / 400);
 
-// Extract headings from markdown source for TOC
+// Extract headings from rendered article (ensures slug matches HTML id)
 interface TocItem {
   depth: number;
   slug: string;
   text: string;
 }
 
-const tocItems: TocItem[] = [];
-const headingRegex = /^(#{2,3})\s+(.+)$/gm;
-const slugify = (text: string) => {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\u4e00-\u9fa5]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-};
-
-let headingMatch;
-while ((headingMatch = headingRegex.exec(articleText)) !== null) {
-  const depth = headingMatch[1].length;
-  const text = headingMatch[2].trim();
-  tocItems.push({
-    depth,
-    slug: slugify(text),
-    text,
-  });
-}
+const tocItems: TocItem[] = (renderedArticle.headings || [])
+  .filter((h: any) => h.depth >= 2 && h.depth <= 3)
+  .map((h: any) => ({
+    depth: h.depth,
+    slug: h.slug,
+    text: h.text,
+  }));
 
 // Get English version link if available
 const englishVersionSlug = article.data.slugEn;
