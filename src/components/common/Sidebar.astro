@@ -110,6 +110,41 @@ const currentPath = Astro.url.pathname;
           <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
         </svg>
       </a>
+      <button
+        id="wechat-btn"
+        class="p-2 rounded-lg transition-colors hover:opacity-80"
+        style="color: var(--color-text-secondary);"
+        aria-label="WeChat"
+        title={currentLang === 'en' ? 'WeChat Official Account' : '微信公众号'}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9.5 9.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5Z"/>
+          <path d="M14.5 13.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5Z"/>
+          <path d="M17 6a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1l3 3 3-3h1a2 2 0 0 0 2-2V6Z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- WeChat QR Modal -->
+    <div id="wechat-modal" class="fixed inset-0 z-50 hidden items-center justify-center" style="background-color: rgba(0,0,0,0.5);">
+      <div class="card p-6 max-w-xs mx-4 relative">
+        <button id="wechat-close" class="absolute top-2 right-2 p-1 rounded" style="color: var(--color-text-muted);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+          </svg>
+        </button>
+        <img
+          src="https://images.jinla.fun/images/20260406-c184d5d9-闲时谈富.webp"
+          alt={currentLang === 'en' ? 'WeChat Official Account: 闲时谈富' : '微信公众号：闲时谈富'}
+          class="w-48 h-48 rounded-lg mx-auto mb-4"
+        />
+        <p class="text-center font-medium" style="color: var(--color-text-primary);">
+          {currentLang === 'en' ? 'WeChat Official Account' : '微信公众号'}
+        </p>
+        <p class="text-center text-sm" style="color: var(--color-text-secondary);">
+          闲时谈富
+        </p>
+      </div>
     </div>
   </div>
 
@@ -118,4 +153,27 @@ const currentPath = Astro.url.pathname;
     <LanguageSwitch client:load />
     <ThemeToggle client:load />
   </div>
+
+  <script>
+    const wechatBtn = document.getElementById('wechat-btn');
+    const wechatModal = document.getElementById('wechat-modal');
+    const wechatClose = document.getElementById('wechat-close');
+
+    wechatBtn?.addEventListener('click', () => {
+      wechatModal?.classList.remove('hidden');
+      wechatModal?.classList.add('flex');
+    });
+
+    wechatClose?.addEventListener('click', () => {
+      wechatModal?.classList.add('hidden');
+      wechatModal?.classList.remove('flex');
+    });
+
+    wechatModal?.addEventListener('click', (e) => {
+      if (e.target === wechatModal) {
+        wechatModal.classList.add('hidden');
+        wechatModal.classList.remove('flex');
+      }
+    });
+  </script>
 </aside>
