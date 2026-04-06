@@ -1,3 +1,13 @@
+- title: 一人公司实操｜AI全程代做开发，我只动嘴
+  titleEn: Solo Company Practice | AI Does All the Development, I Just Talk
+  description: 用AI实现一人公司！本期分享我用豆包+Claude，3天从0到1开发「十年书」中国五年规划可视化网站的全流程。
+  descriptionEn: Building a one-person company with AI! This episode shares my journey using Doubao + Claude to develop the "Ten Year Book" China Five-Year Plan visualization website from scratch in 3 days.
+  platform: bilibili
+  videoId: BV1gAXQBoEGB
+  thumbnail: https://images.jinla.fun/images/20260406-4e4ee2c2-AI独立开发封面.webp
+  pubDate: 2025-04-06
+  duration: 12:30
+
 - title: 从零构建AI应用
   titleEn: Building AI Apps from Scratch
   description: 手把手教你用LangChain构建第一个AI应用
