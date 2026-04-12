@@ -7,9 +7,10 @@ import { siteConfig } from '../../data/site';
 
 interface Props {
   lang?: string;
+  altLangUrl?: string;
 }
 
-const { lang } = Astro.props;
+const { lang, altLangUrl } = Astro.props;
 const currentLang = lang || getLangFromUrl(Astro.url);
 const t = useTranslations(currentLang as 'zh' | 'en');
 
@@ -57,7 +58,8 @@ const currentPath = Astro.url.pathname;
         <a
           href={item.href}
           class:list={['nav-link block', {
-            'active': currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
+            'active': currentPath === item.href ||
+              (item.href !== `${prefix}/` && currentPath.startsWith(item.href + '/'))
           }]}
         >
           {item.label}
@@ -129,7 +131,7 @@ const currentPath = Astro.url.pathname;
 
   <!-- Theme & Language Controls -->
   <div class="p-4 border-t flex items-center justify-center gap-2" style="border-color: var(--color-border);">
-    <LanguageSwitch client:load />
+    <LanguageSwitch client:load altLangUrl={altLangUrl} />
     <ThemeToggle client:load />
   </div>
 

@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Globe } from 'lucide-react';
 
-export default function LanguageSwitch() {
+interface Props {
+  altLangUrl?: string;
+}
+
+export default function LanguageSwitch({ altLangUrl }: Props) {
   const [currentLang, setCurrentLang] = useState<'zh' | 'en'>('zh');
   const [mounted, setMounted] = useState(false);
 
@@ -13,6 +17,12 @@ export default function LanguageSwitch() {
   }, []);
 
   const toggle = () => {
+    // Use altLangUrl if provided (for articles with different slugs)
+    if (altLangUrl) {
+      window.location.href = altLangUrl;
+      return;
+    }
+
     const newLang = currentLang === 'zh' ? 'en' : 'zh';
     const path = window.location.pathname;
 

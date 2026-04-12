@@ -60,7 +60,7 @@ const englishVersionUrl = englishVersionSlug ? `/en/articles/${englishVersionSlu
 
 <BaseLayout lang={lang} title={title} description={description}>
   <div class="flex min-h-screen">
-    <Sidebar lang={lang} />
+    <Sidebar lang={lang} altLangUrl={englishVersionUrl} />
 
     <main class="main-content flex-1 p-4 md:p-8">
       <div class="article-layout">

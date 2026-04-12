@@ -60,9 +60,9 @@ const currentPath = Astro.url.pathname;
         <a
           href={item.href}
           class:list={['block px-3 py-2 rounded-lg text-sm', {
-            'font-medium': currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
+            'font-medium': currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href + '/'))
           }]}
-          style={currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
+          style={currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href + '/'))
             ? 'color: var(--color-accent)'
             : 'color: var(--color-text-secondary)'}
         >
