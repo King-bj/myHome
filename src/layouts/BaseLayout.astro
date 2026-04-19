@@ -11,9 +11,11 @@ interface Props {
   description?: string;
   lang?: string;
   image?: string;
+  /** When zh/en article slugs differ, mobile header language toggle uses this instead of prefixing /en. */
+  altLangUrl?: string | null;
 }
 
-const { title, description, lang, image } = Astro.props;
+const { title, description, lang, image, altLangUrl } = Astro.props;
 const currentLang = lang || getLangFromUrl(Astro.url);
 
 const siteTitle = title || (currentLang === 'en' ? 'Zhimu Zisheng | Indie Developer & AI Explorer' : '植木自生 | 独立开发者 & AI探索者');
@@ -61,7 +63,7 @@ const canonicalUrl = Astro.url.href;
     </script>
   </head>
   <body class="min-h-screen">
-    <Header lang={currentLang} />
+    <Header lang={currentLang} altLangUrl={altLangUrl ?? undefined} />
     <main class="pt-16 md:pt-0">
       <slot />
     </main>

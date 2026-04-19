@@ -9,7 +9,7 @@ tags:
   - GC
   - Debugging
 cover: https://images.jinla.fun/images/20260412-4ae333fc-top.webp
-slugZh: cpu
+slugZh: java-performance-optimization-fgc-case-study
 ---
 
 # From 2.8 Hours of FGC to Resolution: A Complete Java Performance Optimization Case Study

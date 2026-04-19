@@ -53,14 +53,16 @@ const tocItems: TocItem[] = (renderedArticle.headings || [])
     text: h.text,
   }));
 
-// Get English version link if available
+// Get English version link if available (match Astro content slug casing, usually lowercase)
 const englishVersionSlug = article.data.slugEn;
-const englishVersionUrl = englishVersionSlug ? `/en/articles/${englishVersionSlug}` : null;
+const englishVersionUrl = englishVersionSlug
+  ? `/en/articles/${englishVersionSlug.toLowerCase()}`
+  : null;
 ---
 
-<BaseLayout lang={lang} title={title} description={description}>
+<BaseLayout lang={lang} title={title} description={description} altLangUrl={englishVersionUrl ?? undefined}>
   <div class="flex min-h-screen">
-    <Sidebar lang={lang} altLangUrl={englishVersionUrl} />
+    <Sidebar lang={lang} altLangUrl={englishVersionUrl ?? undefined} />
 
     <main class="main-content flex-1 p-4 md:p-8">
       <div class="article-layout">

@@ -8,7 +8,7 @@ tags:
   - DevOps
   - Performance Optimization
 cover: https://images.jinla.fun/images/20260412-2acbe7cb-ssh.webp
-slugZh: 交互式与非交互式链接区别
+slugZh: interactive-ssh-cpu-issue
 ---
 
 Hello everyone! Today I'm documenting a production issue related to automation. This article covers the complete troubleshooting process—from problem identification and reproduction to root cause analysis, fixes, and long-term optimization strategies. I hope this helps anyone facing similar issues.

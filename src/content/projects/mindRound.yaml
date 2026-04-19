@@ -1,0 +1,17 @@
+name: MindRound 观思集
+nameEn: MindRound
+description: （观书见意，集思论道）是一个把"作者人格"本地化的桌面应用。你可以和一位作者单独聊天，也可以把多位作者拉到一个"圆桌"里就同一个话题轮流发言。模型调用 OpenAI 兼容 API，数据与人物卡都只在本机。
+descriptionEn: This local desktop application revives literary personas for private chats and roundtable debates. Running on OpenAI-compatible APIs, all persona data stays entirely on your device.
+techStack:
+  - TypeScript
+  - React
+  - Vite
+  - Tauri 2
+  - Rust
+  - Zustand
+  - Tailwind CSS
+github: https://github.com/King-bj/mindRound
+thumbnail: https://images.jinla.fun/images/20260419-1658a474-mindRound封面.webp
+featured: true
+status: in-progress
+order: 0

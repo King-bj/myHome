@@ -7,9 +7,10 @@ import '../../styles/global.css';
 
 interface Props {
   lang?: string;
+  altLangUrl?: string;
 }
 
-const { lang } = Astro.props;
+const { lang, altLangUrl } = Astro.props;
 const currentLang = lang || getLangFromUrl(Astro.url);
 const t = useTranslations(currentLang as 'zh' | 'en');
 
@@ -34,7 +35,7 @@ const currentPath = Astro.url.pathname;
     <!-- Actions -->
     <div class="flex items-center gap-2">
       <SearchButton />
-      <LanguageSwitch client:load />
+      <LanguageSwitch client:load altLangUrl={altLangUrl} />
       <ThemeToggle client:load />
     </div>
 

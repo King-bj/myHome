@@ -53,14 +53,16 @@ const tocItems: TocItem[] = (renderedArticle.headings || [])
     text: h.text,
   }));
 
-// Get Chinese version link if available
+// Get Chinese version link if available (match Astro content slug casing, usually lowercase)
 const chineseVersionSlug = article.data.slugZh;
-const chineseVersionUrl = chineseVersionSlug ? `/articles/${chineseVersionSlug}` : null;
+const chineseVersionUrl = chineseVersionSlug
+  ? `/articles/${chineseVersionSlug.toLowerCase()}`
+  : null;
 ---
 
-<BaseLayout lang={lang} title={title} description={description}>
+<BaseLayout lang={lang} title={title} description={description} altLangUrl={chineseVersionUrl ?? undefined}>
   <div class="flex min-h-screen">
-    <Sidebar lang={lang} altLangUrl={chineseVersionUrl} />
+    <Sidebar lang={lang} altLangUrl={chineseVersionUrl ?? undefined} />
 
     <main class="main-content flex-1 p-4 md:p-8">
       <div class="article-layout">
