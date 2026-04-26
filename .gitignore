@@ -33,3 +33,5 @@ prompts/
 
 # Scripts env files
 scripts/.env
+
+.claude/
