@@ -1,4 +1,6 @@
 ---
+import { getArticleCategory } from '../../data/articleTaxonomy';
+
 interface Props {
   title: string;
   description: string;
@@ -13,6 +15,7 @@ const { title, description, pubDate, tags, cover, slug, lang = 'zh' } = Astro.pr
 
 const prefix = lang === 'en' ? '/en' : '';
 const articleUrl = `${prefix}/articles/${slug}`;
+const category = getArticleCategory(tags, lang as 'zh' | 'en');
 
 const formattedDate = pubDate.toLocaleDateString(lang === 'en' ? 'en-US' : 'zh-CN', {
   year: 'numeric',
@@ -46,14 +49,15 @@ const formattedDate = pubDate.toLocaleDateString(lang === 'en' ? 'en-US' : 'zh-C
 
   <!-- Content -->
   <div class="p-4 flex-1">
-    <div class="flex items-center gap-2 mb-2">
+    <div class="flex items-center gap-2 mb-2 flex-wrap">
       <time class="text-xs" style="color: var(--color-text-muted);">
         {formattedDate}
       </time>
+      <span class="category-chip">{category.label}</span>
     </div>
 
-    <h3 class="font-semibold mb-2" style="color: var(--color-text-primary);">
-      <a href={articleUrl} class="hover:opacity-80 transition-opacity">
+    <h3 class="font-semibold mb-2 text-lg" style="color: var(--color-text-primary);">
+      <a href={articleUrl} class="transition-colors hover:opacity-90">
         {title}
       </a>
     </h3>

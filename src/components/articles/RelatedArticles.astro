@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { getArticleCategory } from '../../data/articleTaxonomy';
 
 interface Props {
   currentSlug: string;
@@ -61,6 +62,7 @@ const relatedArticles = allArticles
           day: 'numeric'
         });
         const matchingTags = article.data.tags.filter((tag: string) => tags.includes(tag));
+        const category = getArticleCategory(article.data.tags, lang);
         // Build URL based on language
         const articleSlug = article.slug.replace(langPrefix, '');
         const articleUrl = lang === 'en' ? `/en/articles/${articleSlug}` : `/articles/${articleSlug}`;
@@ -79,12 +81,15 @@ const relatedArticles = allArticles
                   {description}
                 </p>
                 <div class="flex items-center justify-between mt-auto">
-                  <time class="text-xs" style="color: var(--color-text-muted);">
-                    {formattedDate}
-                  </time>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <time class="text-xs" style="color: var(--color-text-muted);">
+                      {formattedDate}
+                    </time>
+                    <span class="category-chip">{category.label}</span>
+                  </div>
                   <div class="flex gap-1">
                     {matchingTags.slice(0, 2).map((tag: string) => (
-                      <span class="text-xs px-1.5 py-0.5 rounded" style="background-color: var(--color-bg-tertiary); color: var(--color-accent);">
+                      <span class="tag">
                         {tag}
                       </span>
                     ))}

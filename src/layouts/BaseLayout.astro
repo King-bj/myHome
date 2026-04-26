@@ -18,8 +18,8 @@ interface Props {
 const { title, description, lang, image, altLangUrl } = Astro.props;
 const currentLang = lang || getLangFromUrl(Astro.url);
 
-const siteTitle = title || (currentLang === 'en' ? 'Zhimu Zisheng | Indie Developer & AI Explorer' : '植木自生 | 独立开发者 & AI探索者');
-const siteDescription = description || (currentLang === 'en' ? 'Backend developer turning AI solopreneur' : '后端开发转型AI超级个体');
+const siteTitle = title || (currentLang === 'en' ? siteConfig.titleEn : siteConfig.title);
+const siteDescription = description || (currentLang === 'en' ? siteConfig.descriptionEn : siteConfig.description);
 const ogImage = image || siteConfig.avatar;
 const canonicalUrl = Astro.url.href;
 ---

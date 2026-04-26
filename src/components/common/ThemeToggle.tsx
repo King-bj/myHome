@@ -23,7 +23,7 @@ export default function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <button className="p-2 rounded-lg" style={{ color: 'var(--color-text-secondary)' }}>
+      <button className="p-2 rounded-xl min-w-[44px] min-h-[44px] inline-flex items-center justify-center" style={{ color: 'var(--color-text-secondary)' }}>
         <Sun size={18} />
       </button>
     );
@@ -32,7 +32,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="p-2 rounded-lg hover:opacity-80 transition-opacity"
+      className="p-2 rounded-xl min-w-[44px] min-h-[44px] inline-flex items-center justify-center hover:opacity-80 transition-opacity"
       style={{ color: 'var(--color-text-secondary)' }}
       aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
     >

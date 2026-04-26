@@ -3,7 +3,8 @@ import ThemeToggle from './ThemeToggle';
 import LanguageSwitch from './LanguageSwitch';
 import SearchButton from './SearchButton.astro';
 import { getLangFromUrl, useTranslations } from '../../i18n';
-import '../../styles/global.css';
+import { siteConfig } from '../../data/site';
+import { buildNavItems } from '../../data/navigation';
 
 interface Props {
   lang?: string;
@@ -13,27 +14,20 @@ interface Props {
 const { lang, altLangUrl } = Astro.props;
 const currentLang = lang || getLangFromUrl(Astro.url);
 const t = useTranslations(currentLang as 'zh' | 'en');
-
-const navItems = [
-  { href: '/', label: t('nav.home') },
-  { href: '/projects', label: t('nav.projects') },
-  { href: '/articles', label: t('nav.articles') },
-  { href: '/videos', label: t('nav.videos') },
-  { href: '/about', label: t('nav.about') },
-];
+const navItems = buildNavItems(currentLang as 'zh' | 'en', t);
 
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-sm md:hidden" style="background-color: rgba(255, 255, 255, 0.9); border-color: var(--color-border);">
+<header class="fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-sm md:hidden" style="background-color: rgba(255, 255, 255, 0.92); border-color: var(--color-border);">
   <nav class="flex items-center justify-between h-16 px-4">
     <!-- Logo -->
-    <a href="/" class="text-lg font-bold" style="color: var(--color-text-primary);">
-      植木自生
+    <a href={navItems[0].href} class="text-lg font-bold" style="color: var(--color-text-primary);">
+      {currentLang === 'en' ? siteConfig.nameEn : siteConfig.name}
     </a>
 
     <!-- Actions -->
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-1">
       <SearchButton />
       <LanguageSwitch client:load altLangUrl={altLangUrl} />
       <ThemeToggle client:load />
@@ -42,7 +36,7 @@ const currentPath = Astro.url.pathname;
     <!-- Mobile menu button -->
     <button
       id="mobile-menu-btn"
-      class="p-2 rounded-lg"
+      class="p-2 rounded-xl min-w-[44px] min-h-[44px] inline-flex items-center justify-center"
       style="color: var(--color-text-secondary);"
       aria-label="Toggle menu"
     >
@@ -60,10 +54,10 @@ const currentPath = Astro.url.pathname;
       {navItems.map((item) => (
         <a
           href={item.href}
-          class:list={['block px-3 py-2 rounded-lg text-sm', {
-            'font-medium': currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href + '/'))
+          class:list={['block px-3 py-2 rounded-xl text-sm min-h-[44px] flex items-center', {
+            'font-medium': currentPath === item.href || (item.href !== navItems[0].href && currentPath.startsWith(item.href + '/'))
           }]}
-          style={currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href + '/'))
+          style={currentPath === item.href || (item.href !== navItems[0].href && currentPath.startsWith(item.href + '/'))
             ? 'color: var(--color-accent)'
             : 'color: var(--color-text-secondary)'}
         >

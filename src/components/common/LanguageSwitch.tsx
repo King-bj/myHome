@@ -40,7 +40,7 @@ export default function LanguageSwitch({ altLangUrl }: Props) {
 
   if (!mounted) {
     return (
-      <button className="p-2 rounded-lg text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+      <button className="p-2 rounded-xl min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
         中
       </button>
     );
@@ -49,7 +49,7 @@ export default function LanguageSwitch({ altLangUrl }: Props) {
   return (
     <button
       onClick={toggle}
-      className="flex items-center gap-1 p-2 rounded-lg hover:opacity-80 transition-opacity text-xs font-medium"
+      className="flex items-center gap-1 p-2 rounded-xl min-w-[44px] min-h-[44px] hover:opacity-80 transition-opacity text-xs font-medium"
       style={{ color: 'var(--color-text-secondary)' }}
       aria-label="Switch language"
     >

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Sidebar from '../../components/common/Sidebar.astro';
 import ArticleCard from '../../components/articles/ArticleCard.astro';
+import { buildCategorySummary, getArticleCategory } from '../../data/articleTaxonomy';
 import { getCollection } from 'astro:content';
 import { getLangFromUrl, useTranslations } from '../../i18n';
 
@@ -13,29 +13,63 @@ const allArticles = await getCollection('articles');
 const articles = allArticles
   .filter(a => !a.data.draft && a.slug.startsWith('zh/'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const categorySummary = buildCategorySummary(articles, 'zh');
+const homeNavItems = [
+  { href: '/', label: t('nav.home') },
+  { href: '/articles', label: t('nav.articles') },
+  { href: '/projects', label: t('nav.projects') },
+  { href: '/about', label: t('nav.about') },
+];
+const currentPath = Astro.url.pathname;
+const filterAllLabel = '全部';
 ---
 
 <BaseLayout lang={lang} title={t('articles.title')}>
-  <div class="flex min-h-screen">
-    <Sidebar lang={lang} />
+  <main class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+      <nav class="home-top-nav mb-6">
+        {homeNavItems.map((item) => (
+          <a
+            href={item.href}
+            class:list={['home-top-nav-link', {
+              'active': currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href + '/'))
+            }]}
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
 
-    <main class="main-content flex-1 p-4 md:p-8">
-      <div class="max-w-4xl mx-auto">
-        <h1 class="text-2xl font-bold mb-8" style="color: var(--color-text-primary);">
+        <h1 class="text-2xl font-bold mb-3" style="color: var(--color-text-primary);">
           {t('articles.title')}
         </h1>
+        <p class="mb-6" style="color: var(--color-text-secondary);">
+          按「自动化、AI 协作、工程排障、产品交付」梳理实践，优先给出可验证、可复用的结果。
+        </p>
+        <div class="mb-8 flex flex-wrap gap-2" data-article-filter-chips>
+          <button type="button" class="category-chip filter-chip-active" data-category-filter="all">
+            {filterAllLabel} · {articles.length}
+          </button>
+          {categorySummary.map((category) => (
+            <button type="button" class="category-chip" data-category-filter={category.key}>
+              {category.label} · {category.count}
+            </button>
+          ))}
+        </div>
 
-        <div class="space-y-4">
+        <div class="space-y-4" data-article-list>
           {articles.map((article) => (
-            <ArticleCard
-              title={article.data.title}
-              description={article.data.description}
-              pubDate={article.data.pubDate}
-              tags={article.data.tags}
-              cover={article.data.cover}
-              slug={article.slug.replace('zh/', '')}
-              lang={lang}
-            />
+            <div data-article-item data-category={getArticleCategory(article.data.tags, 'zh').key}>
+              <ArticleCard
+                title={article.data.title}
+                description={article.data.description}
+                pubDate={article.data.pubDate}
+                tags={article.data.tags}
+                cover={article.data.cover}
+                slug={article.slug.replace('zh/', '')}
+                lang={lang}
+              />
+            </div>
           ))}
         </div>
 
@@ -44,7 +78,29 @@ const articles = allArticles
             {lang === 'en' ? 'No articles yet' : '暂无文章'}
           </p>
         )}
-      </div>
-    </main>
-  </div>
+    </div>
+  </main>
 </BaseLayout>
+
+<script>
+  const chipsRoot = document.querySelector('[data-article-filter-chips]');
+  const chips = Array.from(document.querySelectorAll('[data-category-filter]'));
+  const items = Array.from(document.querySelectorAll('[data-article-item]'));
+
+  if (chipsRoot && chips.length > 0 && items.length > 0) {
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const targetCategory = chip.getAttribute('data-category-filter') || 'all';
+
+        chips.forEach((c) => c.classList.remove('filter-chip-active'));
+        chip.classList.add('filter-chip-active');
+
+        items.forEach((item) => {
+          const itemCategory = item.getAttribute('data-category');
+          const shouldShow = targetCategory === 'all' || itemCategory === targetCategory;
+          item.classList.toggle('hidden', !shouldShow);
+        });
+      });
+    });
+  }
+</script>

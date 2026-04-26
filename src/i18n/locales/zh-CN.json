@@ -8,13 +8,23 @@
   },
   "home": {
     "greeting": "你好，我是",
-    "title": "独立开发者 & AI探索者",
-    "subtitle": "用代码构建产品，用AI放大能力",
+    "title": "自动化 · 确定性 · 可交付的结果",
+    "subtitle": "我帮助被 AI 焦虑和重复劳动困住的人，用自动化减少消耗，用确定性重建节奏。",
+    "tagline": "自动化 · 确定性 · 可交付的结果",
+    "heroQuestion": "你每天有多少时间在重复的事情上消磨？",
+    "heroLine1": "自动化不是让你学更多技能，是让你拿回时间。",
+    "heroKeywords": "自动化 · 确定性 · 可交付的结果",
+    "bilibiliHint": "部分长文配有 B 站视频版，同一套叙事，换种方式看完。",
     "viewProjects": "查看项目",
     "viewArticles": "阅读文章",
     "featuredProjects": "精选作品",
     "latestArticles": "最新文章",
-    "viewAll": "查看全部"
+    "viewAll": "查看全部",
+    "firstVisitLead": "",
+    "firstVisitHeadlineLine1": "开发者 · 自动化 · 确定性",
+    "firstVisitHeadlineLine2": "",
+    "firstVisitDescription": "我专注把重复工作变成可验证的自动化流程，让团队把时间留给判断、沟通与交付。",
+    "latestArticlesHint": "下拉继续看最近实践文章"
   },
   "projects": {
     "title": "项目作品",
@@ -27,11 +37,14 @@
     }
   },
   "articles": {
-    "title": "技术文章",
+    "title": "实践文章",
     "readMore": "阅读全文",
     "alsoPublishedOn": "本文也发布于",
     "minRead": "分钟阅读",
-    "noArticles": "暂无文章"
+    "noArticles": "暂无文章",
+    "watchVideo": "在 B 站看视频版",
+    "viewBilibiliChannel": "B 站频道（更多视频）",
+    "relatedSeries": "同系列实践"
   },
   "videos": {
     "title": "视频内容",

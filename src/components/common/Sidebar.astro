@@ -2,8 +2,9 @@
 import ThemeToggle from './ThemeToggle';
 import LanguageSwitch from './LanguageSwitch';
 import SearchButton from './SearchButton.astro';
-import { getLangFromUrl, useTranslations, defaultLang } from '../../i18n';
+import { getLangFromUrl, useTranslations } from '../../i18n';
 import { siteConfig } from '../../data/site';
+import { buildNavItems } from '../../data/navigation';
 
 interface Props {
   lang?: string;
@@ -13,16 +14,7 @@ interface Props {
 const { lang, altLangUrl } = Astro.props;
 const currentLang = lang || getLangFromUrl(Astro.url);
 const t = useTranslations(currentLang as 'zh' | 'en');
-
-const prefix = currentLang === defaultLang ? '' : `/${currentLang}`;
-
-const navItems = [
-  { href: `${prefix}/`, label: t('nav.home') },
-  { href: `${prefix}/projects`, label: t('nav.projects') },
-  { href: `${prefix}/articles`, label: t('nav.articles') },
-  { href: `${prefix}/videos`, label: t('nav.videos') },
-  { href: `${prefix}/about`, label: t('nav.about') },
-];
+const navItems = buildNavItems(currentLang as 'zh' | 'en', t);
 
 const currentPath = Astro.url.pathname;
 ---
@@ -42,9 +34,9 @@ const currentPath = Astro.url.pathname;
       <h1 class="text-xl font-bold text-center md:text-left" style="color: var(--color-text-primary);">
         {currentLang === 'en' ? siteConfig.nameEn : siteConfig.name}
       </h1>
-      <p class="text-sm mt-1 text-center md:text-left" style="color: var(--color-text-secondary);">
-        {currentLang === 'en' ? 'Indie Developer & AI Explorer' : '独立开发者 & AI探索者'}
-      </p>
+      <div class="mt-2 text-center md:text-left">
+        <p class="slogan-badge inline-flex">{t('home.tagline')}</p>
+      </div>
     </div>
 
     <!-- Search -->
@@ -59,7 +51,7 @@ const currentPath = Astro.url.pathname;
           href={item.href}
           class:list={['nav-link block', {
             'active': currentPath === item.href ||
-              (item.href !== `${prefix}/` && currentPath.startsWith(item.href + '/'))
+              (item.href !== navItems[0].href && currentPath.startsWith(item.href + '/'))
           }]}
         >
           {item.label}
@@ -73,7 +65,7 @@ const currentPath = Astro.url.pathname;
         href={siteConfig.social.github}
         target="_blank"
         rel="noopener noreferrer"
-        class="p-2 rounded-lg transition-colors hover:opacity-80"
+        class="p-2 rounded-xl transition-colors hover:opacity-80 min-w-[44px] min-h-[44px] inline-flex items-center justify-center"
         style="color: var(--color-text-secondary);"
         aria-label="GitHub"
         title="GitHub"
@@ -87,7 +79,7 @@ const currentPath = Astro.url.pathname;
         href={siteConfig.social.bilibili}
         target="_blank"
         rel="noopener noreferrer"
-        class="p-2 rounded-lg transition-colors hover:opacity-80"
+        class="p-2 rounded-xl transition-colors hover:opacity-80 min-w-[44px] min-h-[44px] inline-flex items-center justify-center"
         style="color: var(--color-text-secondary);"
         aria-label="Bilibili"
         title="Bilibili"
@@ -102,7 +94,7 @@ const currentPath = Astro.url.pathname;
       </a>
       <a
         href={`mailto:${siteConfig.email}`}
-        class="p-2 rounded-lg transition-colors hover:opacity-80"
+        class="p-2 rounded-xl transition-colors hover:opacity-80 min-w-[44px] min-h-[44px] inline-flex items-center justify-center"
         style="color: var(--color-text-secondary);"
         aria-label="Email"
         title="Email"
@@ -114,7 +106,7 @@ const currentPath = Astro.url.pathname;
       </a>
       <button
         id="wechat-btn"
-        class="p-2 rounded-lg transition-colors hover:opacity-80"
+        class="p-2 rounded-xl transition-colors hover:opacity-80 min-w-[44px] min-h-[44px] inline-flex items-center justify-center"
         style="color: var(--color-text-secondary);"
         aria-label="WeChat"
         title={currentLang === 'en' ? 'WeChat Official Account' : '微信公众号'}

@@ -1,129 +1,151 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Sidebar from '../components/common/Sidebar.astro';
 import { getLangFromUrl, useTranslations } from '../i18n';
+import { siteConfig } from '../data/site';
 
 const lang = getLangFromUrl(Astro.url) || 'zh';
 const t = useTranslations(lang as 'zh' | 'en');
+const homeNavItems = [
+  { href: '/', label: t('nav.home') },
+  { href: '/articles', label: t('nav.articles') },
+  { href: '/projects', label: t('nav.projects') },
+  { href: '/about', label: t('nav.about') },
+];
+const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout lang={lang} title={t('about.title')}>
-  <div class="flex min-h-screen">
-    <Sidebar lang={lang} />
+  <main class="p-4 md:p-8">
+    <div class="max-w-3xl mx-auto">
+      <nav class="home-top-nav mb-6">
+        {homeNavItems.map((item) => (
+          <a
+            href={item.href}
+            class:list={['home-top-nav-link', {
+              'active': currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href + '/'))
+            }]}
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
 
-    <main class="main-content flex-1 p-4 md:p-8">
-      <div class="max-w-3xl mx-auto">
         <h1 class="text-2xl font-bold mb-8" style="color: var(--color-text-primary);">
           {t('about.title')}
         </h1>
 
-        <!-- 我是谁 -->
-        <section class="mb-12">
+        <section class="mb-10">
           <div class="card p-6">
-            <div class="prose prose-slate dark:prose-invert max-w-none">
-              <p class="text-lg mb-4" style="color: var(--color-text-secondary);">
-                8年后端开发者，正在探索 AI 时代的技术可能性。
-              </p>
-              <p style="color: var(--color-text-secondary);">
-                我擅长在复杂系统中定位和解决性能瓶颈——从 Flink 数据处理到 Elasticsearch 检索优化，从 JVM 调优到分布式架构设计。我享受把一个慢系统变快的过程。
-              </p>
-              <p class="mt-4" style="color: var(--color-text-secondary);">
-                现在，我在学习如何用 AI 放大个人能力：从 Prompt Engineering 到 Agent 开发，从 RAG 系统到自动化工作流。我相信未来最好的开发者，是能和 AI 协作的人。
-              </p>
-            </div>
+            <p class="text-sm font-medium mb-3" style="color: var(--color-accent);">
+              自动化 · 确定性 · 可交付的结果
+            </p>
+            <p class="text-lg mb-4" style="color: var(--color-text-primary);">
+              无论是生活还是工作，最重要的是<strong>确定性</strong>：达成一致的需求、经过验证的结果、明确的反馈。
+            </p>
+            <p style="color: var(--color-text-secondary);">
+              自动化和 AI 适合吃掉重复与机械核对；不适合替代「什么才是正确结果」的判断——那一步必须留给人。我在这里写的每一篇实践，都会写清<strong>输入、输出、怎么验收、哪里不能交给机器</strong>。
+            </p>
           </div>
         </section>
 
-        <!-- 我能帮你解决什么问题 -->
-        <section class="mb-12">
-          <h2 class="text-xl font-semibold mb-6" style="color: var(--color-text-primary);">
-            我能帮你解决什么问题
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold mb-4" style="color: var(--color-text-primary);">
+            你为什么来这里
           </h2>
+          <div class="card p-6 space-y-4">
+            <p class="text-lg font-medium" style="color: var(--color-text-primary);">
+              你每天有多少时间在重复的事情上消磨？
+            </p>
+            <p style="color: var(--color-text-secondary);">
+              自动化不是让你再学一摞工具清单，而是让你<strong>拿回时间</strong>：把小时级的逐台登录、复制粘贴、口径不一，收敛成可复用的脚本、报告与监控。
+            </p>
+            <p style="color: var(--color-text-secondary);">
+              我帮助被 AI 焦虑困住的人：用<strong>自动化减少消耗</strong>，用<strong>确定性重建节奏</strong>。博客与
+              <a href={siteConfig.social.bilibili} class="link" target="_blank" rel="noopener noreferrer">B 站</a>
+              讲的是同一件事——有的文章会做成视频，但不是全部；有视频版的文章会在文内给出快捷入口。
+            </p>
+          </div>
+        </section>
 
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold mb-4" style="color: var(--color-text-primary);">
+            我能交付什么
+          </h2>
           <div class="space-y-4">
             <div class="card p-6">
               <h3 class="font-medium mb-2" style="color: var(--color-text-primary);">
-                🚀 性能问题排查与优化
+                生产环境重复排查自动化
               </h3>
               <p class="text-sm" style="color: var(--color-text-secondary);">
-                数据处理慢、内存占用高、查询响应慢？我可以帮你定位瓶颈并给出优化方案。
+                面向后端 / 运维 / SRE：多机巡检、文件与进程命中、JVM 与 GC 类问题的脚本化与可观测补强。交付物通常是可跑的脚本、报告模板、验收清单，而不是「建议你学某某」。
               </p>
             </div>
-
             <div class="card p-6">
               <h3 class="font-medium mb-2" style="color: var(--color-text-primary);">
-                🏗️ 后端架构设计
+                AI 产品的边界与交付
               </h3>
               <p class="text-sm" style="color: var(--color-text-secondary);">
-                需要设计可扩展的数据处理系统？我可以分享从单机到分布式集群的实战经验。
-              </p>
-            </div>
-
-            <div class="card p-6">
-              <h3 class="font-medium mb-2" style="color: var(--color-text-primary);">
-                🤖 AI 应用开发
-              </h3>
-              <p class="text-sm" style="color: var(--color-text-secondary);">
-                想把 AI 能力接入现有系统？我可以帮你设计 RAG、Agent 或自动化工作流。
+                以 MindRound 等实践为例：哪些复杂度不值得上、如何把「能安装、能跑、能信」定义清楚。重点是<strong>可交付的结果</strong>，而不是堆功能。
               </p>
             </div>
           </div>
         </section>
 
-        <!-- 正在探索 -->
-        <section class="mb-12">
-          <h2 class="text-xl font-semibold mb-6" style="color: var(--color-text-primary);">
-            正在探索
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold mb-4" style="color: var(--color-text-primary);">
+            适合与不适合
           </h2>
-
-          <div class="card p-6">
-            <div class="flex flex-wrap gap-2">
-              <span class="tag">AI Agent 开发</span>
-              <span class="tag">RAG 系统构建</span>
-              <span class="tag">LLM 应用落地</span>
-              <span class="tag">自动化工作流</span>
-              <span class="tag">独立开发者生态</span>
+          <div class="card p-6 grid gap-4 md:grid-cols-2">
+            <div>
+              <h3 class="text-sm font-medium mb-2" style="color: var(--color-text-muted);">更适合</h3>
+              <ul class="text-sm list-disc pl-5 space-y-1" style="color: var(--color-text-secondary);">
+                <li>重复排查、批量确认、报告口径要统一</li>
+                <li>愿意写清验收标准，而不是「你看着办」</li>
+                <li>接受「机器做重复，人做判断」的分工</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium mb-2" style="color: var(--color-text-muted);">暂不承接</h3>
+              <ul class="text-sm list-disc pl-5 space-y-1" style="color: var(--color-text-secondary);">
+                <li>没有责任边界与验收标准的「随便自动化一下」</li>
+                <li>纯概念咨询、没有落地对象与数据</li>
+              </ul>
             </div>
           </div>
         </section>
 
-        <!-- 技术栈 -->
         <section>
-          <h2 class="text-xl font-semibold mb-6" style="color: var(--color-text-primary);">
-            技术栈
+          <h2 class="text-xl font-semibold mb-4" style="color: var(--color-text-primary);">
+            {t('about.skills')}
           </h2>
-
           <div class="card p-6">
             <div class="grid gap-4 md:grid-cols-2">
               <div>
                 <h3 class="font-medium mb-3 text-sm" style="color: var(--color-text-muted);">
-                  后端 & 大数据
+                  后端 & 运维
                 </h3>
                 <div class="flex flex-wrap gap-2">
                   <span class="tag">Java</span>
                   <span class="tag">Python</span>
+                  <span class="tag">Linux</span>
+                  <span class="tag">Docker</span>
+                  <span class="tag">K8s</span>
+                </div>
+              </div>
+              <div>
+                <h3 class="font-medium mb-3 text-sm" style="color: var(--color-text-muted);">
+                  数据与可观测
+                </h3>
+                <div class="flex flex-wrap gap-2">
                   <span class="tag">Kafka</span>
                   <span class="tag">Flink</span>
                   <span class="tag">Elasticsearch</span>
                   <span class="tag">Redis</span>
                 </div>
               </div>
-              <div>
-                <h3 class="font-medium mb-3 text-sm" style="color: var(--color-text-muted);">
-                  AI & 工具
-                </h3>
-                <div class="flex flex-wrap gap-2">
-                  <span class="tag">LangChain</span>
-                  <span class="tag">Claude API</span>
-                  <span class="tag">OpenAI API</span>
-                  <span class="tag">Docker</span>
-                  <span class="tag">K8s</span>
-                </div>
-              </div>
             </div>
           </div>
         </section>
-      </div>
-    </main>
-  </div>
+    </div>
+  </main>
 </BaseLayout>

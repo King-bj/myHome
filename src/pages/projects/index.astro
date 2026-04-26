@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Sidebar from '../../components/common/Sidebar.astro';
 import ProjectCard from '../../components/projects/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 import { getLangFromUrl, useTranslations } from '../../i18n';
@@ -10,14 +9,31 @@ const t = useTranslations(lang as 'zh' | 'en');
 
 const allProjects = await getCollection('projects');
 const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
+const homeNavItems = [
+  { href: '/', label: t('nav.home') },
+  { href: '/articles', label: t('nav.articles') },
+  { href: '/projects', label: t('nav.projects') },
+  { href: '/about', label: t('nav.about') },
+];
+const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout lang={lang} title={t('projects.title')}>
-  <div class="flex min-h-screen">
-    <Sidebar lang={lang} />
+  <main class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+      <nav class="home-top-nav mb-6">
+        {homeNavItems.map((item) => (
+          <a
+            href={item.href}
+            class:list={['home-top-nav-link', {
+              'active': currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href + '/'))
+            }]}
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
 
-    <main class="main-content flex-1 p-4 md:p-8">
-      <div class="max-w-4xl mx-auto">
         <h1 class="text-2xl font-bold mb-8" style="color: var(--color-text-primary);">
           {t('projects.title')}
         </h1>
@@ -44,7 +60,6 @@ const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
             {lang === 'en' ? 'No projects yet' : '暂无项目'}
           </p>
         )}
-      </div>
-    </main>
-  </div>
+    </div>
+  </main>
 </BaseLayout>

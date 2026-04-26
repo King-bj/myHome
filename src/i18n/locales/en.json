@@ -8,13 +8,23 @@
   },
   "home": {
     "greeting": "Hi, I'm",
-    "title": "Indie Developer & AI Explorer",
-    "subtitle": "Building products with code, amplifying capabilities with AI",
+    "title": "Automation · certainty · deliverable outcomes",
+    "subtitle": "I help people worn down by repetitive work and AI anxiety: automation cuts the grind, certainty restores rhythm.",
+    "tagline": "Automation · certainty · deliverable outcomes",
+    "heroQuestion": "How much of your day disappears into repetitive work?",
+    "heroLine1": "Automation isn't about learning more tools—it's about reclaiming your time.",
+    "heroKeywords": "Automation · certainty · deliverable outcomes",
+    "bilibiliHint": "Some long posts have a Bilibili version—the same story, faster to absorb.",
     "viewProjects": "View Projects",
     "viewArticles": "Read Articles",
     "featuredProjects": "Featured Projects",
     "latestArticles": "Latest Articles",
-    "viewAll": "View All"
+    "viewAll": "View All",
+    "firstVisitLead": "First visit",
+    "firstVisitHeadlineLine1": "Developer · Automation · Certainty",
+    "firstVisitHeadlineLine2": "",
+    "firstVisitDescription": "I turn repetitive work into verifiable automation flows so teams can spend time on judgment, communication, and delivery.",
+    "latestArticlesHint": "Scroll down for recent practice notes"
   },
   "projects": {
     "title": "Projects",
@@ -31,7 +41,10 @@
     "readMore": "Read More",
     "alsoPublishedOn": "Also published on",
     "minRead": "min read",
-    "noArticles": "No articles yet"
+    "noArticles": "No articles yet",
+    "watchVideo": "Watch on Bilibili",
+    "viewBilibiliChannel": "Bilibili channel",
+    "relatedSeries": "More in this series"
   },
   "videos": {
     "title": "Videos",

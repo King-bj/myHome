@@ -1,18 +1,17 @@
 ---
-title: "从FGC 2.8小时到问题解决：一次完整的Java性能优化实战"
-description: "VM Thread CPU高，Old区100%满，应用响应从200ms暴涨到5秒+。这是一次完整的生产环境问题排查记录，从发现到定位到解决，最终根因是OkHttp重试风暴导致的堆爆炸。"
+title: "Java 线上维护者：VM Thread 打满、Old 区 100% 时，如何用可复现步骤定位 FGC，并把事后预警做成默认动作"
+description: "一次生产 OkHttp 重试风暴引发堆爆炸的完整记录：从 top/jstack/jstat 到 heap 直方图，再到修复后如何用指标与脚本把「下一次雪崩」拦在早期——机器给信号，人做取舍。"
 pubDate: 2026-04-12
 tags:
   - Java
   - JVM
   - 性能优化
   - GC
-  - 调试
 cover: https://images.jinla.fun/images/20260412-4ae333fc-top.webp
 slugEn: java-performance-optimization-fgc-case-study
 ---
 
-# 从FGC 2.8小时到问题解决：一次完整的Java性能优化实战
+# Java 线上维护者：VM Thread 打满、Old 区 100% 时，如何用可复现步骤定位 FGC，并把事后预警做成默认动作
 
 > VM Thread CPU高，Old区100%满，应用响应从200ms暴涨到5秒+
 > 
@@ -198,6 +197,18 @@ StackTraceElement 持有者：
 - Old区使用率：60%左右
 - Full GC：频率大幅降低
 ```
+
+---
+
+## 事后：用监控与脚本把「下一次 FGC」拦在早期
+
+救火结束后，更值得自动化的是**征兆**，而不是「再表演一次手工 jstack」：
+
+- **指标**：Old 区占用上升速率、FGC 次数与耗时、外部依赖失败率；若网关或客户端有重试计数，单独做面板。
+- **日志与告警**：对「外部大面积不可达」做独立告警，避免业务层在失败路径上无限重试、堆栈对象膨胀。
+- **脚本**：文中 `cpu_analysis.sh` 适合作为值班**第一步**，但要写清：谁有权跑、对生产是否有采样成本、输出如何归档与复核。
+
+**仍必须由人判断**：阈值、是否允许自动降级/切流、heap dump 是否在业务高峰可接受——自动化提供**可验证信号**，风险取舍留给人。
 
 ---
 

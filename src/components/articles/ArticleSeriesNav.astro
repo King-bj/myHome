@@ -1,0 +1,66 @@
+---
+/**
+ * Lightweight “same series” links for automation / certainty practice posts.
+ * Excludes the current article by content slug (without lang prefix).
+ */
+interface Props {
+  lang: 'zh' | 'en';
+  currentSlug: string;
+}
+
+const { lang, currentSlug } = Astro.props;
+
+const cleanCurrent = currentSlug.replace(/^(zh|en)\//, '');
+
+type Item = { slug: string; labelZh: string; labelEn: string };
+
+const series: Item[] = [
+  {
+    slug: 'automation-reduce-repetitive-work-with-ai-assist',
+    labelZh: '安全/合规排查：多机包与进程命中自动化',
+    labelEn: 'Security sweeps: multi-host package & process hits',
+  },
+  {
+    slug: 'interactive-ssh-cpu-issue',
+    labelZh: '运维：批量 SSH 巡检为何把 CPU 打满',
+    labelEn: 'Ops: why batch SSH checks peg CPU',
+  },
+  {
+    slug: 'java-performance-optimization-fgc-case-study',
+    labelZh: 'Java 线上：FGC 与堆爆后的脚本化排查与预警',
+    labelEn: 'Java prod: FGC, heap storms, scripted triage',
+  },
+  {
+    slug: 'mindround-from-zero-to-one',
+    labelZh: 'MindRound：用边界交付本地 AI 桌面应用',
+    labelEn: 'MindRound: shipping a local AI app with boundaries',
+  },
+  {
+    slug: 'automation-engineer-toolbox',
+    labelZh: '工程师自动化工具箱：场景里选 Shell / Python / AI / 监控',
+    labelEn: 'Toolbox: Shell, Python, AI APIs, monitoring by scenario',
+  },
+];
+
+const prefix = lang === 'en' ? '/en/articles/' : '/articles/';
+const t = lang === 'en' ? (i: Item) => i.labelEn : (i: Item) => i.labelZh;
+
+const links = series.filter((i) => i.slug !== cleanCurrent);
+---
+
+{links.length > 0 && (
+  <section class="article-series-nav mt-12 pt-8 border-t" style="border-color: var(--color-border);">
+    <h2 class="text-lg font-semibold mb-3" style="color: var(--color-text-primary);">
+      {lang === 'en' ? 'More in this series' : '同系列实践'}
+    </h2>
+    <ul class="space-y-2 text-sm">
+      {links.map((item) => (
+        <li>
+          <a href={`${prefix}${item.slug}`} class="link">
+            {t(item)}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

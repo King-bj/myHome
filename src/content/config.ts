@@ -31,6 +31,8 @@ const articlesCollection = defineCollection({
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()),
     cover: z.string().optional(),
+    /** Full Bilibili video URL (e.g. https://www.bilibili.com/video/BV...). When set, article page shows a “watch video” shortcut. */
+    bilibiliVideoUrl: z.string().url().optional(),
     // Cross-language slug for linking between zh/en versions
     slugEn: z.string().optional(),  // Used in zh articles to link to English version
     slugZh: z.string().optional(),  // Used in en articles to link to Chinese version

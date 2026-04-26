@@ -1,18 +1,18 @@
 ---
-title: "From 2.8 Hours of FGC to Resolution: A Complete Java Performance Optimization Case Study"
-description: "VM Thread CPU high, Old Gen 100% full, application response time spiked from 200ms to 5s+. This is a complete production incident troubleshooting record - from discovery to root cause to resolution. The root cause was a heap explosion caused by OkHttp retry storms."
+title: "Java on-call engineers: when VM Thread pegs CPU and Old Gen is full—how we traced FGC to OkHttp retries and added guardrails afterward"
+description: "Production walkthrough from top/jstack/jstat to heap histogram, OkHttp retry storm root cause, fixes, and what we automated next (signals + scripts) so humans keep judgment while machines surface drift early."
 pubDate: 2026-04-12
 tags:
   - Java
   - JVM
   - Performance Optimization
   - GC
-  - Debugging
+  - Automation
 cover: https://images.jinla.fun/images/20260412-4ae333fc-top.webp
 slugZh: java-performance-optimization-fgc-case-study
 ---
 
-# From 2.8 Hours of FGC to Resolution: A Complete Java Performance Optimization Case Study
+# Java on-call engineers: when VM Thread pegs CPU and Old Gen is full—how we traced FGC to OkHttp retries and added guardrails afterward
 
 > VM Thread CPU high, Old Gen 100% full, application response time spiked from 200ms to 5s+
 >
@@ -165,7 +165,7 @@ StackTraceElement holders:
 - Responsible for failure retry and redirect handling
 - Large number of `StackTraceElement` objects created and held
 
-**Root cause location**: This service calls many external interfaces for data aggregation and display. In this environment, most interfaces are unreachable, causing **OkHttp to frequently fail and retry**, creating大量异常对象 and stack traces.
+**Root cause location**: This service calls many external interfaces for data aggregation and display. In this environment, most interfaces are unreachable, causing **OkHttp to frequently fail and retry**, creating massive numbers of exception objects and stack traces.
 
 ---
 
@@ -198,6 +198,18 @@ After fix:
 - Old generation usage: ~60%
 - Full GC: Significantly reduced frequency
 ```
+
+---
+
+## Aftermath: automation and monitoring that catch the *next* FGC earlier
+
+After the firefight, the highest leverage work is **signals**, not repeating the same manual `jstack` theater:
+
+- **Metrics**: Old Gen growth rate, FGC counts/durations, dependency failure rates; if the gateway tracks client retries, chart them separately.
+- **Alerts & logs**: page when dependencies go dark *before* the JVM turns into a retry amplifier.
+- **Scripts**: keep the `cpu_analysis.sh`-style artifact as a first step for on-call, but document who may run it, production impact, and where outputs land.
+
+**Humans still decide** thresholds, whether dumps are allowed during peak traffic, and whether to auto-degrade traffic—automation should surface **verifiable** signals; people own the trade-offs.
 
 ---
 

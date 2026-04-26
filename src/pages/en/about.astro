@@ -1,129 +1,151 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Sidebar from '../../components/common/Sidebar.astro';
 import { getLangFromUrl, useTranslations } from '../../i18n';
+import { siteConfig } from '../../data/site';
 
 const lang = getLangFromUrl(Astro.url) || 'en';
 const t = useTranslations(lang as 'zh' | 'en');
+const homeNavItems = [
+  { href: '/en/', label: t('nav.home') },
+  { href: '/en/articles', label: t('nav.articles') },
+  { href: '/en/projects', label: t('nav.projects') },
+  { href: '/en/about', label: t('nav.about') },
+];
+const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout lang={lang} title={t('about.title')}>
-  <div class="flex min-h-screen">
-    <Sidebar lang={lang} />
+  <main class="p-4 md:p-8">
+    <div class="max-w-3xl mx-auto">
+      <nav class="home-top-nav mb-6">
+        {homeNavItems.map((item) => (
+          <a
+            href={item.href}
+            class:list={['home-top-nav-link', {
+              'active': currentPath === item.href || (item.href !== '/en/' && currentPath.startsWith(item.href + '/'))
+            }]}
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
 
-    <main class="main-content flex-1 p-4 md:p-8">
-      <div class="max-w-3xl mx-auto">
         <h1 class="text-2xl font-bold mb-8" style="color: var(--color-text-primary);">
           {t('about.title')}
         </h1>
 
-        <!-- Who I Am -->
-        <section class="mb-12">
+        <section class="mb-10">
           <div class="card p-6">
-            <div class="prose prose-slate dark:prose-invert max-w-none">
-              <p class="text-lg mb-4" style="color: var(--color-text-secondary);">
-                Backend developer with 8 years of experience, exploring the possibilities of AI-powered development.
-              </p>
-              <p style="color: var(--color-text-secondary);">
-                I specialize in finding and fixing performance bottlenecks in complex systems—from Flink data processing to Elasticsearch query optimization, from JVM tuning to distributed architecture design. I enjoy the process of making slow systems fast.
-              </p>
-              <p class="mt-4" style="color: var(--color-text-secondary);">
-                Currently, I'm learning how to amplify individual capabilities with AI: from Prompt Engineering to Agent development, from RAG systems to automated workflows. I believe the best developers of the future are those who can collaborate effectively with AI.
-              </p>
-            </div>
+            <p class="text-sm font-medium mb-3" style="color: var(--color-accent);">
+              Automation · certainty · deliverable outcomes
+            </p>
+            <p class="text-lg mb-4" style="color: var(--color-text-primary);">
+              What matters most—in work and in life—is <strong>certainty</strong>: agreed requirements, verified results, and clear feedback.
+            </p>
+            <p style="color: var(--color-text-secondary);">
+              Automation and AI are great at repetition and mechanical checks. They are not a substitute for judgment about what “correct” means. Every practice write-up here states <strong>inputs, outputs, how to verify, and what must stay human</strong>.
+            </p>
           </div>
         </section>
 
-        <!-- How I Can Help -->
-        <section class="mb-12">
-          <h2 class="text-xl font-semibold mb-6" style="color: var(--color-text-primary);">
-            How I Can Help
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold mb-4" style="color: var(--color-text-primary);">
+            Why you are here
           </h2>
+          <div class="card p-6 space-y-4">
+            <p class="text-lg font-medium" style="color: var(--color-text-primary);">
+              How much of your day disappears into repetitive work?
+            </p>
+            <p style="color: var(--color-text-secondary);">
+              Automation is not another skills checklist. It is how you <strong>reclaim time</strong>—turning hours of manual host-by-host work into scripts, reports, and monitoring you can trust.
+            </p>
+            <p style="color: var(--color-text-secondary);">
+              I write for people worn down by repetition and AI anxiety: <strong>automation cuts the grind</strong>, <strong>certainty restores rhythm</strong>. This site and
+              <a href={siteConfig.social.bilibili} class="link" target="_blank" rel="noopener noreferrer">Bilibili</a>
+              tell the same story. Some posts become videos—not all. When a video exists, the article links to it directly.
+            </p>
+          </div>
+        </section>
 
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold mb-4" style="color: var(--color-text-primary);">
+            What I deliver
+          </h2>
           <div class="space-y-4">
             <div class="card p-6">
               <h3 class="font-medium mb-2" style="color: var(--color-text-primary);">
-                🚀 Performance Troubleshooting & Optimization
+                Production troubleshooting automation
               </h3>
               <p class="text-sm" style="color: var(--color-text-secondary);">
-                Slow data processing, high memory usage, sluggish queries? I can help identify bottlenecks and provide optimization strategies.
+                For backend, ops, and SRE: multi-host checks, file/process hits, JVM/GC playbooks turned into scripts and observability hooks. Deliverables are runnable artifacts and acceptance checklists—not vague advice.
               </p>
             </div>
-
             <div class="card p-6">
               <h3 class="font-medium mb-2" style="color: var(--color-text-primary);">
-                🏗️ Backend Architecture Design
+                AI product boundaries and shipping
               </h3>
               <p class="text-sm" style="color: var(--color-text-secondary);">
-                Need to design a scalable data processing system? I can share practical experience from single-node to distributed clusters.
-              </p>
-            </div>
-
-            <div class="card p-6">
-              <h3 class="font-medium mb-2" style="color: var(--color-text-primary);">
-                🤖 AI Application Development
-              </h3>
-              <p class="text-sm" style="color: var(--color-text-secondary);">
-                Want to integrate AI capabilities into existing systems? I can help design RAG, Agents, or automated workflows.
+                Using MindRound and similar work: what complexity not to add, and how to define “installable, runnable, trustworthy.” The emphasis is <strong>deliverable outcomes</strong>, not feature stacking.
               </p>
             </div>
           </div>
         </section>
 
-        <!-- Currently Exploring -->
-        <section class="mb-12">
-          <h2 class="text-xl font-semibold mb-6" style="color: var(--color-text-primary);">
-            Currently Exploring
+        <section class="mb-10">
+          <h2 class="text-xl font-semibold mb-4" style="color: var(--color-text-primary);">
+            Fit / not a fit
           </h2>
-
-          <div class="card p-6">
-            <div class="flex flex-wrap gap-2">
-              <span class="tag">AI Agent Development</span>
-              <span class="tag">RAG Systems</span>
-              <span class="tag">LLM Applications</span>
-              <span class="tag">Automation Workflows</span>
-              <span class="tag">Indie Developer Ecosystem</span>
+          <div class="card p-6 grid gap-4 md:grid-cols-2">
+            <div>
+              <h3 class="text-sm font-medium mb-2" style="color: var(--color-text-muted);">Better fit</h3>
+              <ul class="text-sm list-disc pl-5 space-y-1" style="color: var(--color-text-secondary);">
+                <li>Repeated checks, batch confirmations, report consistency</li>
+                <li>Clear acceptance criteria, not “you figure it out”</li>
+                <li>Comfortable with machines doing repetition and humans doing judgment</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium mb-2" style="color: var(--color-text-muted);">Not a fit right now</h3>
+              <ul class="text-sm list-disc pl-5 space-y-1" style="color: var(--color-text-secondary);">
+                <li>“Automate something” with no owner, boundary, or verification</li>
+                <li>Purely conceptual consulting with no concrete system to change</li>
+              </ul>
             </div>
           </div>
         </section>
 
-        <!-- Tech Stack -->
         <section>
-          <h2 class="text-xl font-semibold mb-6" style="color: var(--color-text-primary);">
-            Tech Stack
+          <h2 class="text-xl font-semibold mb-4" style="color: var(--color-text-primary);">
+            {t('about.skills')}
           </h2>
-
           <div class="card p-6">
             <div class="grid gap-4 md:grid-cols-2">
               <div>
                 <h3 class="font-medium mb-3 text-sm" style="color: var(--color-text-muted);">
-                  Backend & Big Data
+                  Backend & ops
                 </h3>
                 <div class="flex flex-wrap gap-2">
                   <span class="tag">Java</span>
                   <span class="tag">Python</span>
+                  <span class="tag">Linux</span>
+                  <span class="tag">Docker</span>
+                  <span class="tag">K8s</span>
+                </div>
+              </div>
+              <div>
+                <h3 class="font-medium mb-3 text-sm" style="color: var(--color-text-muted);">
+                  Data & observability
+                </h3>
+                <div class="flex flex-wrap gap-2">
                   <span class="tag">Kafka</span>
                   <span class="tag">Flink</span>
                   <span class="tag">Elasticsearch</span>
                   <span class="tag">Redis</span>
                 </div>
               </div>
-              <div>
-                <h3 class="font-medium mb-3 text-sm" style="color: var(--color-text-muted);">
-                  AI & Tools
-                </h3>
-                <div class="flex flex-wrap gap-2">
-                  <span class="tag">LangChain</span>
-                  <span class="tag">Claude API</span>
-                  <span class="tag">OpenAI API</span>
-                  <span class="tag">Docker</span>
-                  <span class="tag">K8s</span>
-                </div>
-              </div>
             </div>
           </div>
         </section>
-      </div>
-    </main>
-  </div>
+    </div>
+  </main>
 </BaseLayout>
