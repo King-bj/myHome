@@ -44,7 +44,8 @@
     "noArticles": "暂无文章",
     "watchVideo": "在 B 站看视频版",
     "viewBilibiliChannel": "B 站频道（更多视频）",
-    "relatedSeries": "同系列实践"
+    "relatedSeries": "同系列实践",
+    "tocTitle": "目录"
   },
   "videos": {
     "title": "视频内容",

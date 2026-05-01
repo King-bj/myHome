@@ -1,0 +1,37 @@
+---
+import LanguageSwitch from './LanguageSwitch';
+
+interface NavItem {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  items: NavItem[];
+  currentPath: string;
+  altLangUrl?: string;
+}
+
+const { items, currentPath, altLangUrl } = Astro.props;
+const rootHref = items[0]?.href ?? '/';
+---
+
+<div class="flex flex-wrap items-center gap-3 mb-6 justify-center md:justify-between">
+  <nav class="home-top-nav md:mx-0">
+    {items.map((item) => (
+      <a
+        href={item.href}
+        class:list={['home-top-nav-link', {
+          active:
+            currentPath === item.href ||
+            (item.href !== rootHref && currentPath.startsWith(item.href + '/')),
+        }]}
+      >
+        {item.label}
+      </a>
+    ))}
+  </nav>
+  <div class="hidden md:flex items-center shrink-0 md:ml-auto">
+    <LanguageSwitch client:load altLangUrl={altLangUrl} />
+  </div>
+</div>

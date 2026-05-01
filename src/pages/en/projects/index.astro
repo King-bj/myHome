@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import HomeTopNav from '../../../components/common/HomeTopNav.astro';
 import ProjectCard from '../../../components/projects/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 import { getLangFromUrl, useTranslations } from '../../../i18n';
@@ -21,18 +22,7 @@ const currentPath = Astro.url.pathname;
 <BaseLayout lang={lang} title={t('projects.title')}>
   <main class="p-4 md:p-8">
     <div class="max-w-4xl mx-auto">
-      <nav class="home-top-nav mb-6">
-        {homeNavItems.map((item) => (
-          <a
-            href={item.href}
-            class:list={['home-top-nav-link', {
-              'active': currentPath === item.href || (item.href !== '/en/' && currentPath.startsWith(item.href + '/'))
-            }]}
-          >
-            {item.label}
-          </a>
-        ))}
-      </nav>
+      <HomeTopNav items={homeNavItems} currentPath={currentPath} />
 
         <h1 class="text-2xl font-bold mb-8" style="color: var(--color-text-primary);">
           {t('projects.title')}

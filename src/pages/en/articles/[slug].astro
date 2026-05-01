@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import HomeTopNav from '../../../components/common/HomeTopNav.astro';
 import ArticleContent from '../../../components/articles/ArticleContent.astro';
 import TableOfContents from '../../../components/articles/TableOfContents.astro';
 import RelatedArticles from '../../../components/articles/RelatedArticles.astro';
@@ -71,21 +72,14 @@ const currentPath = Astro.url.pathname;
 
 <BaseLayout lang={lang} title={title} description={description} altLangUrl={chineseVersionUrl ?? undefined}>
   <main class="p-4 md:p-8">
-      <div class="max-w-3xl mx-auto">
-        <nav class="home-top-nav mb-6">
-          {homeNavItems.map((item) => (
-            <a
-              href={item.href}
-              class:list={['home-top-nav-link', {
-                'active': currentPath === item.href || (item.href !== '/en/' && currentPath.startsWith(item.href + '/'))
-              }]}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+    <div class="max-w-5xl mx-auto">
+      <HomeTopNav
+        items={homeNavItems}
+        currentPath={currentPath}
+        altLangUrl={chineseVersionUrl ?? undefined}
+      />
 
-        <article class="article-main max-w-3xl mx-auto">
+      <article class="article-main max-w-3xl mx-auto">
           <!-- Back link -->
           <nav class="mb-6">
             <a href="/en/articles" class="inline-flex items-center gap-1 text-sm link">
@@ -174,9 +168,14 @@ const currentPath = Astro.url.pathname;
             )}
           </header>
 
-          <!-- Mobile TOC (inline) -->
           {tocItems.length > 0 && (
-            <TableOfContents items={tocItems} variant="mobile" />
+            <div class="xl:hidden">
+              <TableOfContents
+                items={tocItems}
+                variant="mobile"
+                title={t('articles.tocTitle')}
+              />
+            </div>
           )}
 
           <ArticleContent content={renderedArticle} lang={lang as 'zh' | 'en'} />
@@ -189,7 +188,17 @@ const currentPath = Astro.url.pathname;
             tags={article.data.tags}
             lang={lang as 'zh' | 'en'}
           />
-        </article>
+      </article>
+    </div>
+
+    {tocItems.length > 0 && (
+      <div class="hidden xl:block">
+        <TableOfContents
+          items={tocItems}
+          variant="desktop"
+          title={t('articles.tocTitle')}
+        />
       </div>
+    )}
   </main>
 </BaseLayout>

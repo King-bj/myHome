@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeTopNav from '../components/common/HomeTopNav.astro';
 import { getLangFromUrl, useTranslations } from '../i18n';
 import { siteConfig } from '../data/site';
 
@@ -17,18 +18,7 @@ const currentPath = Astro.url.pathname;
 <BaseLayout lang={lang} title={t('about.title')}>
   <main class="p-4 md:p-8">
     <div class="max-w-3xl mx-auto">
-      <nav class="home-top-nav mb-6">
-        {homeNavItems.map((item) => (
-          <a
-            href={item.href}
-            class:list={['home-top-nav-link', {
-              'active': currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href + '/'))
-            }]}
-          >
-            {item.label}
-          </a>
-        ))}
-      </nav>
+      <HomeTopNav items={homeNavItems} currentPath={currentPath} />
 
         <h1 class="text-2xl font-bold mb-8" style="color: var(--color-text-primary);">
           {t('about.title')}
@@ -60,9 +50,7 @@ const currentPath = Astro.url.pathname;
               自动化不是让你再学一摞工具清单，而是让你<strong>拿回时间</strong>：把小时级的逐台登录、复制粘贴、口径不一，收敛成可复用的脚本、报告与监控。
             </p>
             <p style="color: var(--color-text-secondary);">
-              我帮助被 AI 焦虑困住的人：用<strong>自动化减少消耗</strong>，用<strong>确定性重建节奏</strong>。博客与
-              <a href={siteConfig.social.bilibili} class="link" target="_blank" rel="noopener noreferrer">B 站</a>
-              讲的是同一件事——有的文章会做成视频，但不是全部；有视频版的文章会在文内给出快捷入口。
+              我帮助被 AI 焦虑困住的人：用<strong>自动化减少消耗</strong>，用<strong>确定性重建节奏</strong>。
             </p>
           </div>
         </section>

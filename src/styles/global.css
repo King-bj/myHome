@@ -39,6 +39,10 @@
     scroll-behavior: smooth;
   }
 
+  .article-main :is(h2, h3, h4) {
+    scroll-margin-top: 1.25rem;
+  }
+
   body {
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);

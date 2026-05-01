@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import HomeTopNav from '../../../components/common/HomeTopNav.astro';
 import ArticleCard from '../../../components/articles/ArticleCard.astro';
 import { buildCategorySummary, getArticleCategory } from '../../../data/articleTaxonomy';
 import { getCollection } from 'astro:content';
@@ -27,18 +28,7 @@ const filterAllLabel = 'All';
 <BaseLayout lang={lang} title={t('articles.title')}>
   <main class="p-4 md:p-8">
     <div class="max-w-4xl mx-auto">
-      <nav class="home-top-nav mb-6">
-        {homeNavItems.map((item) => (
-          <a
-            href={item.href}
-            class:list={['home-top-nav-link', {
-              'active': currentPath === item.href || (item.href !== '/en/' && currentPath.startsWith(item.href + '/'))
-            }]}
-          >
-            {item.label}
-          </a>
-        ))}
-      </nav>
+      <HomeTopNav items={homeNavItems} currentPath={currentPath} />
 
         <h1 class="text-2xl font-bold mb-3" style="color: var(--color-text-primary);">
           {t('articles.title')}

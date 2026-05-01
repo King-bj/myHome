@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeTopNav from '../components/common/HomeTopNav.astro';
 import ProjectCard from '../components/projects/ProjectCard.astro';
 import ArticleCard from '../components/articles/ArticleCard.astro';
 import { getCollection } from 'astro:content';
@@ -38,18 +39,7 @@ const homeNavItems = [
 <BaseLayout lang={lang}>
     <main class="p-4 md:p-8">
       <div class="max-w-5xl mx-auto">
-        <nav class="home-top-nav mb-6">
-          {homeNavItems.map((item) => (
-            <a
-              href={item.href}
-              class:list={['home-top-nav-link', {
-                'active': currentPath === item.href || (item.href !== `${prefix}/` && currentPath.startsWith(item.href + '/'))
-              }]}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+        <HomeTopNav items={homeNavItems} currentPath={currentPath} />
 
         <section class="first-visit-panel hero-accent card mb-10 p-6 md:p-9">
           <div class="first-visit-head mb-4">

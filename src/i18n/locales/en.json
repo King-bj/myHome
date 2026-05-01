@@ -44,7 +44,8 @@
     "noArticles": "No articles yet",
     "watchVideo": "Watch on Bilibili",
     "viewBilibiliChannel": "Bilibili channel",
-    "relatedSeries": "More in this series"
+    "relatedSeries": "More in this series",
+    "tocTitle": "On this page"
   },
   "videos": {
     "title": "Videos",
